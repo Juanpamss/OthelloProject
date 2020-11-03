@@ -9,7 +9,7 @@ var port = process.env.PORT;
 var directory = __dirname + '/public';
 
 /*If this is not a web server, the readjust the port to localhost*/
-if(typeof port == "undefined" || port){
+if(typeof port == 'undefined' || port){
     directory = './public';
     port = 8080;
 }
