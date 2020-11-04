@@ -24,6 +24,7 @@ var app = http.createServer(
             file.serve(request,response);
         }).resume();
     }
-).listen(process.env.PORT, '0.0.0.0');
-
+)
+    //.listen(process.env.PORT, '0.0.0.0');
+.listen(port)
 console.log('Server running at: ' + port);
