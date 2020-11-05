@@ -20,17 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/lobby.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server2.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/cert.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/csr.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/key.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/cert.crt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/name.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/name.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ssl/cert.pem" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +73,7 @@
       <updated>1604366759621</updated>
       <workItem from="1604366761307" duration="4158000" />
       <workItem from="1604508648423" duration="10790000" />
-      <workItem from="1604554544672" duration="707000" />
+      <workItem from="1604554544672" duration="1978000" />
     </task>
     <servers />
   </component>

@@ -29,8 +29,8 @@ var file = new static.Server(directory);
 app.use('/', express.static(directory))
 
 const httpsOptions = {
-    cert: fs.readFileSync(path.join(__dirname,'ssl','cert.pem')),
-    key: fs.readFileSync(path.join(__dirname,'ssl', 'key.pem'))
+    cert: fs.readFileSync(path.join(__dirname,'ssl','cert.crt')),
+    key: fs.readFileSync(path.join(__dirname,'ssl', 'key.key'))
 }
 
 https.createServer(httpsOptions,app).listen(port);
