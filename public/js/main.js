@@ -1,16 +1,8 @@
 /*Functions*/
 
-//Returns value associated
-function getURLParameters (param){
-    var pageURL = window.location.search.substring(1);
-    var pageURLvariables = pageURL.split('&');
+/*Connect to the socket server*/
+var socket = io.connect();
 
-    for (var i = 0; i < pageURLvariables.length; i++){
-        var parameterName = pageURLvariables[i].split('=');
-        if(parameterName[0] == param){
-            return parameterName[1];
-        }
-    }
-}
-
-$('#messages').append('<h4>'+getURLParameters('username')+'</h4>');
+socket.on('log', function (array){
+    console.log.apply(console,array);
+})

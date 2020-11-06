@@ -20,10 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/ssl/cert.crt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/passport-config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/lobby.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/lobby.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ssl/cert.pem" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +78,9 @@
       <updated>1604366759621</updated>
       <workItem from="1604366761307" duration="4158000" />
       <workItem from="1604508648423" duration="10790000" />
-      <workItem from="1604554544672" duration="1978000" />
+      <workItem from="1604554544672" duration="2352000" />
+      <workItem from="1604625086696" duration="4144000" />
+      <workItem from="1604629684866" duration="12831000" />
     </task>
     <servers />
   </component>
@@ -96,6 +103,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="926" y="217" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1604647485793">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="926" y="217" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1604647485793" />
     <state x="478" y="11" width="580" height="801" key="find.popup" timestamp="1604513127053">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
