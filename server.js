@@ -50,7 +50,7 @@ const users = []
 
 /*Setting Login*/
 //Tell the server to serve static files from the public folder
-app.use('/', express.static(directory));
+//app.use('/', express.static(directory));
 
 /*Define usages*/
 app.use(express.urlencoded({ extended: false}));
@@ -65,8 +65,8 @@ app.use(passport.session());
 app.use(methodOverride('_method'));
 
 /*Set get methods*/
-app.get('/index', checkAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+app.get('/', checkAuthenticated, (req, res) => {
+    res.sendFile(__dirname + '/public/login.html');
 })
 
 app.get('/register', checkNotAuthenticated, (req, res) => {
@@ -98,7 +98,7 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/lobby.html',
+    successRedirect: '/lobby',
     failureRedirect: '/login',
     failureFlash: true
 }))
