@@ -2,6 +2,9 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
+/*Require Postgress module*/
+const dbConnection = require('./db-connection');
+
 /*Require express module*/
 const express = require('express');
 
@@ -18,14 +21,17 @@ const bcrypt = require('bcrypt');
 const flash = require('express-flash');
 const session = require('express-session');
 
-/*Include passport and session*/
-const passport = require('passport');
-const initializePassport = require('./passport-config');
-initializePassport(
-    passport,
-    username => users.find(user => user.username === username),
-    id => users.find(user => user.id === id)
-)
+/*Include password handler*/
+const password = require('./lib/passwordHandler')
+
+/*Include passport*/
+const passport = require('passport')
+require('./passport')
+/*var user = {
+    id: 1,
+    username: "ata",
+    password: "$2b$10$ah/H3tFWm7f08Oy6USdJsO1bvR3onVAlB/xGa8DsfRL.c.Dzxh1ii"
+}*/
 
 /*Include override*/
 const methodOverride = require('method-override');
@@ -35,6 +41,11 @@ const path = require('path');
 const fs = require('fs')
 const app = express();
 
+/*Connect to DB*/
+dbConnection.connectToDB();
+
+/*Setting Database Users*/
+const users = []
 /*Assume this is running on a web server (Heroku)*/
 var port = process.env.PORT;
 var directory = __dirname + '/public';
@@ -44,9 +55,6 @@ if(typeof port == 'undefined' || port){
     directory = './public';
     port = 8080;
 }
-
-/*Setting Database Users*/
-const users = []
 
 /*Setting Login*/
 //Tell the server to serve static files from the public folder
@@ -60,6 +68,8 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
+
+/*Uer passport and session*/
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
@@ -84,24 +94,36 @@ app.get('/lobby', checkAuthenticated, (req, res) => {
 /*Set post methods*/
 app.post('/register', async (req, res) => {
     try{
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        users.push({
-            id: Date.now().toString(),
-            username: req.body.username,
-            password : hashedPassword
-        })
+        const saltedHashedPassword = password.generatePassword(req.body.password);
+        dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
+        console.log("User created")
         res.redirect('/login')
-        console.log(users)
     }catch{
         res.redirect('/register')
     }
 })
 
 app.post('/login', passport.authenticate('local', {
-    successRedirect: '/lobby',
-    failureRedirect: '/login',
-    failureFlash: true
-}))
+        successRedirect: '/lobby',
+        failureRedirect: '/login',
+        failureFlash: true
+    })
+
+    //let result = {}
+
+    //req.body.username, req.body.password
+
+    /*dbConnection.selectUser("juan", "pass").then(function (res){
+        if(res != null){
+            result = {
+                id: res.rows[0]["ID"],
+                username: res.rows[0]["USERNAME"],
+                password: res.rows[0]["PASSWORD"]
+            }
+
+        }
+    }).catch(e => console.error(e.stack))*/
+)
 
 /*Logout the user*/
 app.delete('/logout', (req, res) => {
@@ -173,3 +195,9 @@ function checkNotAuthenticated(req, res, next){
     //.listen(process.env.PORT, '0.0.0.0');
 .listen(port)
 console.log('Server running at: ' + port);*/
+
+/*Database Connection*/
+
+
+//dbConnection.insertNewUser("diego", "ana")
+
