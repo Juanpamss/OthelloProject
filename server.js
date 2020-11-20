@@ -69,6 +69,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public'));
+
 /*Set get methods*/
 app.get('/', checkAuthenticated, (req, res) => {
     res.sendFile(__dirname + '/public/login.html');
@@ -83,7 +86,7 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 })
 
 app.get('/lobby', checkAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/lobby.html');
+    res.render('lobby', {user: req.user.username});
 })
 
 /*Set post methods*/
@@ -145,6 +148,71 @@ io.sockets.on('connection', function (socket){
     socket.on('disconnect', function(socket){
         log('Client disconnected from the server');
     });
+
+    /*Join room command*/
+    /**/
+    socket.on('join_room', function(payload){
+        log('server received command', 'join_room', payload)
+        if(('undefined' === typeof payload) || !payload){
+            var error_message = 'join_room had no payload'
+            log(error_message)
+            socket.emit('join_room_response',{
+                result: 'fail',
+                message: error_message
+            });
+
+            return;
+        }
+
+        var room = payload.room
+        if(('undefined' === typeof room) || !room){
+            var error_message = 'join_room did not specified a room'
+            log(error_message)
+            socket.emit('join_room_response',{
+                result: 'fail',
+                message: error_message
+            });
+
+            return;
+        }
+
+        var username = payload.username
+        if(('undefined' === typeof username) || !username){
+            var error_message = 'join_room did not specified a username'
+            log(error_message)
+            socket.emit('join_room_response',{
+                result: 'fail',
+                message: error_message
+            });
+
+            return;
+        }
+
+        socket.join(room);
+
+        var roomObject = io.sockets.adapter.rooms[room]
+        if(('undefined' === typeof roomObject) || !roomObject){
+            var error_message = 'join_room could not create a room'
+            log(error_message)
+            socket.emit('join_room_response',{
+                result: 'fail',
+                message: error_message
+            });
+
+            return;
+        }
+
+        var numClients = roomObject.length
+        var success_data = {
+            result: 'success',
+            room: roomObject,
+            username: username,
+            membership: (numClients + 1)
+        }
+
+        io.sockets.in(room).emit('join_room_response', success_data)
+        log('Room ' + room + ' was joined by ' + username)
+    });
 });
 
 /*Check if the user is logged in, if not redirect to Login page*/
@@ -163,6 +231,8 @@ function checkNotAuthenticated(req, res, next){
     }
     next()
 }
+
+/*Manage messages from client*/
 
 
 /*Construct http server to get file from the file server*/
