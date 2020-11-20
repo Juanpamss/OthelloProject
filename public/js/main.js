@@ -46,7 +46,7 @@ socket.on('join_room_response', function (payload){
         nodeA.hide();
         nodeB.hide();
         nodeC.hide();
-        $('players').append(nodeA,nodeB,nodeC);
+        $('#players').append(nodeA,nodeB,nodeC);
         nodeA.slideDown(1000);
         nodeB.slideDown(1000);
         nodeC.slideDown(1000);
@@ -58,7 +58,7 @@ socket.on('join_room_response', function (payload){
     /**/
 
     /*Chat messages*/
-    var newHTML = '<p>' + payload.username + 'just entered the lobby</p>';
+    var newHTML = '<p>' + payload.username + ' just entered the lobby</p>';
     var newNode = $(newHTML);
     newNode.hide();
     $('#messages').append(newNode);
@@ -86,7 +86,7 @@ socket.on('player_disconnected', function (payload){
     }
 
     /*Chat messages*/
-    var newHTML = '<p>' + payload.username + 'left the lobby</p>';
+    var newHTML = '<p>' + payload.username + ' left the lobby</p>';
     var newNode = $(newHTML);
     newNode.hide();
     $('#messages').append(newNode);
@@ -99,7 +99,7 @@ $(function (){
     var payload = {};
     payload.room = chat_room;
     payload.username = document.getElementById("username").innerHTML;;
-    console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
+    //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
     socket.emit('join_room', payload);
 })
 
