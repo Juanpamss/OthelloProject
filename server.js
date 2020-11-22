@@ -246,6 +246,154 @@ io.sockets.on('connection', function (socket){
 
         log('join_room_success')
     });
+
+    /*Invite command*/
+
+    socket.on('invite', function (payload){
+        log('invite with ' + JSON.stringify(payload))
+
+        /*Check that payload was sent*/
+        if('undefined' === typeof payload || !payload){
+            const error_message = 'invite had no payload'
+            log(error_message)
+            socket.emit('invite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*Check that the message can be traced to a username*/
+        const username = players[socket.id].username
+        if(('undefined' === typeof username) || !username){
+            const error_message = 'invite cannot identify who sent the message'
+            log(error_message)
+            socket.emit('invite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const requested_user = payload.requested_user
+        if(('undefined' === typeof requested_user) || !requested_user){
+            const error_message = 'invite did not specify a requested_user'
+            log(error_message)
+            socket.emit('invite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const room = players[socket.id].room
+        const roomObject = io.sockets.adapter.rooms[room]
+
+        /*Ensure that user invited is in the room*/
+        if(!roomObject.sockets.hasOwnProperty(requested_user)){
+            const error_message = 'invite requested a user that was not in the room'
+            log(error_message)
+            socket.emit('invite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*If everything is OK, then respond to the inviter*/
+        const success_data = {
+            result: 'success',
+            socket_id: requested_user
+        }
+
+        socket.emit('invite_response', success_data)
+
+        /*Tell the invitee that they have been invited*/
+
+        const success_data_invitee = {
+            result: 'success',
+            socket_id: socket.id
+        }
+
+        socket.to(requested_user).emit('invited', success_data_invitee)
+
+        log('invite successful')
+    })
+
+    /*Uninvite command*/
+
+    socket.on('uninvite', function (payload){
+        log('uninvite with ' + JSON.stringify(payload))
+
+        /*Check that payload was sent*/
+        if('undefined' === typeof payload || !payload){
+            const error_message = 'invite had no payload'
+            log(error_message)
+            socket.emit('uninvite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*Check that the message can be traced to a username*/
+        const username = players[socket.id].username
+        if(('undefined' === typeof username) || !username){
+            const error_message = 'uninvite cannot identify who sent the message'
+            log(error_message)
+            socket.emit('uninvite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const requested_user = payload.requested_user
+        if(('undefined' === typeof requested_user) || !requested_user){
+            const error_message = 'uninvite did not specify a requested_user'
+            log(error_message)
+            socket.emit('uninvite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const room = players[socket.id].room
+        const roomObject = io.sockets.adapter.rooms[room]
+
+        /*Ensure that user invited is in the room*/
+        if(!roomObject.sockets.hasOwnProperty(requested_user)){
+            const error_message = 'uninvite requested a user that was not in the room'
+            log(error_message)
+            socket.emit('uninvite_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*If everything is OK, then respond to the inviter*/
+        const success_data = {
+            result: 'success',
+            socket_id: requested_user
+        }
+
+        socket.emit('uninvite_response', success_data)
+
+        /*Tell the uninvitee that they have been invited*/
+
+        const success_data_invitee = {
+            result: 'success',
+            socket_id: socket.id
+        }
+
+        socket.to(requested_user).emit('uninvited', success_data_invitee)
+
+        log('uninvite successful')
+    })
+
+
 });
 
 /*Check if the user is logged in, if not redirect to Login page*/
