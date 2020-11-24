@@ -19,3 +19,8 @@ table#game_board td{
 #messages p{
     margin: 0px;
 }
+
+td.hovered_over:hover{
+    background:url('../images/hover.png');
+    background-size: 60px 60px;
+}
