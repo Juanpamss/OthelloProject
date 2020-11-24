@@ -330,7 +330,7 @@ io.sockets.on('connection', function (socket){
         log('uninvite with ' + JSON.stringify(payload))
 
         /*Check that payload was sent*/
-        if('undefined' === typeof payload || !payload){
+        if(('undefined' === typeof payload) || !payload){
             const error_message = 'invite had no payload'
             log(error_message)
             socket.emit('uninvite_response', {
@@ -398,7 +398,88 @@ io.sockets.on('connection', function (socket){
     })
 
 
+
+    /*game_start command*/
+
+    socket.on('game_start', function (payload){
+        log('game_start with ' + JSON.stringify(payload));
+
+        /*Check that payload was sent*/
+        if(('undefined' === typeof payload) || !payload){
+            const error_message = 'invite had no payload'
+            log(error_message)
+            socket.emit('game_start_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*Check that the message can be traced to a username*/
+        const username = players[socket.id].username
+        if(('undefined' === typeof username) || !username){
+            const error_message = 'game_start cannot identify who sent the message'
+            log(error_message)
+            socket.emit('game_start_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const requested_user = payload.requested_user
+        if(('undefined' === typeof requested_user) || !requested_user){
+            const error_message = 'game_start did not specify a requested_user'
+            log(error_message)
+            socket.emit('game_start_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const room = players[socket.id].room
+        const roomObject = io.sockets.adapter.rooms[room]
+
+        /*Ensure that user invited is in the room*/
+        if(!roomObject.sockets.hasOwnProperty(requested_user)){
+            const error_message = 'game_start requested a user that was not in the room'
+            log(error_message)
+            socket.emit('game_start_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /* If everything is OK, then respond to the game_starter that it was successful */
+        var game_id = Math.floor((1+Math.random()) *0x10000).toString(16).substring(1);
+        var success_data = {
+            result: 'success',
+            socket_id: requested_user,
+            game_id: game_id
+        };
+
+        socket.emit('game_start_response', success_data)
+
+        /*Tell the other player to play */
+
+        var success_data = {
+            result: 'success',
+            socket_id: socket.id,
+            game_id: game_id
+        };
+
+        socket.to(requested_user).emit('game_start_response', success_data)
+
+        log('game_start successful')
+    })
+
 });
+
+
+
+
 
 /*Check if the user is logged in, if not redirect to Login page*/
 function checkAuthenticated(req, res, next){
