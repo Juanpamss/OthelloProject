@@ -245,7 +245,6 @@ io.sockets.on('connection', function (socket){
         }
 
         log('join_room_success')
-
         if(room !== 'lobby'){
             send_game_update(socket, room, 'initial update');
         }
@@ -257,7 +256,7 @@ io.sockets.on('connection', function (socket){
         log('invite with ' + JSON.stringify(payload))
 
         /*Check that payload was sent*/
-        if('undefined' === typeof payload || !payload){
+        if(('undefined' === typeof payload) || !payload){
             const error_message = 'invite had no payload'
             log(error_message)
             socket.emit('invite_response', {

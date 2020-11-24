@@ -1,3 +1,9 @@
+/*
+var username = getURLParameters('username');
+if('undefined' == typeof username || !username){
+    username = 'Anonymous_'+Math.random();
+}
+*/
 var chat_room = getURLParameters('game_id');
 if('undefined' == typeof chat_room || !chat_room){
     chat_room = 'lobby'
@@ -175,14 +181,23 @@ socket.on('player_disconnected', function (payload){
 });
 
 // ?
+
 $(function (){
     var payload = {};
     payload.room = chat_room;
-    payload.username = document.getElementById("username").innerHTML;;
+    payload.username = document.getElementById("username").innerHTML;
     //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
     socket.emit('join_room', payload);
 })
-
+/*
+$(function (){
+    var payload = {};
+    payload.room = chat_room;
+    payload.username = username
+    //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
+    socket.emit('join_room', payload);
+})
+*/
 function getURLParameters(parameterName){
     var pageURL = window.location.search.substring(1);
     var pageURLVariables = pageURL.split('&');
