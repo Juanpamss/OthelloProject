@@ -19,7 +19,7 @@ const verifyCallback = (username, password, done) => {
             }
 
             const isValid = validPassword.isValidPassword(password, result.hash, result.salt)
-
+            
             if(isValid){
                 return done(null, result)
             }else{
