@@ -228,40 +228,36 @@ socket.on('game_update', function (payload){
                 whitesum++
             }
             /*If a board space has changed*/
-            if(old_board[row][column] != board[row][column]){
-                if(old_board[row][column] == '?' && board[row][column] == ' '){
-                    $('#'+row+'_'+column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
+            if(old_board[row][column] != board[row][column]) {
+                if (old_board[row][column] == '?' && board[row][column] == ' ') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == '?' && board[row][column] == 'w') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == '?' && board[row][column] == 'b') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == ' ' && board[row][column] == 'w') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == ' ' && board[row][column] == 'b') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == 'w' && board[row][column] == ' ') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == 'b' && board[row][column] == ' ') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == 'w' && board[row][column] == 'b') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
+                } else if (old_board[row][column] == 'b' && board[row][column] == 'w') {
+                    $('#' + row + '_' + column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
+                } else {
+                    $('#' + row + '_' + column).html('<img src="assets/images/error.gif" alt="error"/>');
                 }
-                else if(old_board[row][column] == '?' && board[row][column] == 'w'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == '?' && board[row][column] == 'b'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == ' ' && board[row][column] == 'w'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == ' ' && board[row][column] == 'b'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == 'w' && board[row][column] == ' '){
-                    $('#'+row+'_'+column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == 'b' && board[row][column] == ' '){
-                    $('#'+row+'_'+column).html('<img src="assets/images/empty.png" alt="empty square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == 'w' && board[row][column] == 'b'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/black_stone.png" alt="black square" style="width:50px;height:50px;"/>');
-                }
-                else if(old_board[row][column] == 'b' && board[row][column] == 'w'){
-                    $('#'+row+'_'+column).html('<img src="assets/images/white_stone.png" alt="white square" style="width:50px;height:50px;"/>');
-                }
-                else{
-                    $('#'+row+'_'+column).html('<img src="assets/images/error.gif" alt="error"/>');
-                }
-                /*Set up interactivity*/
-                $('#'+row+'_'+column).off('click')
-                if(board[row][column] == ' '){
+            }
+
+            /*Set up interactivity*/
+            $('#'+row+'_'+column).off('click')
+            $('#'+row+'_'+column).removeClass('hovered_over')
+
+            if(payload.game.whose_turn === my_color){
+                if(payload.game.legal_moves[row][column] === my_color.substring(0,1)){
                     $('#'+row+'_'+column).addClass('hovered_over')
                     $('#'+row+'_'+column).click(function (r,c){
                         return function (){
@@ -273,8 +269,6 @@ socket.on('game_update', function (payload){
                             socket.emit('play_token',payload)
                         }
                     }(row,column))
-                }else{
-                    $('#'+row+'_'+column).removeClass('hovered_over')
                 }
             }
         }
