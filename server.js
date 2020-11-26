@@ -123,12 +123,13 @@ const httpsOptions = {
 
 let server = https.createServer(httpsOptions,app).listen(port);
 
-console.log('Server running at: ' + port);
+console.log('Server running at: ' + port)
 
 /*****Configure socket server*****/
-let players = [];
+let players = []
+let gameMovesToStore = []
 
-const io = require('socket.io').listen(server);
+const io = require('socket.io').listen(server)
 
 io.sockets.on('connection', function (socket){
     /*Log activity*/
@@ -625,6 +626,20 @@ io.sockets.on('connection', function (socket){
         let d = new Date()
         game.last_move_time = d.getTime()
         send_game_update(socket, game_id, 'played a token')
+
+
+        /*Safe a valid move played to store it in database when the game is over*/
+        let moveToStore = {}
+        moveToStore.game = game_id
+        moveToStore.move = {
+            row: row,
+            column: column,
+            color: color,
+            username: username
+        }
+        gameMovesToStore.push(moveToStore)
+        /***************/
+
     })
 });
 /*Part of the code related to the game state*/
@@ -651,7 +666,6 @@ function create_new_game(){
         [' ',' ',' ',' ',' ',' ',' ',' ']
     ];
     new_game.legal_moves = calculate_valid_moves('b',new_game.board);
-
     return new_game
 }
 
@@ -749,27 +763,23 @@ function calculate_valid_moves(who, board){
 }
 
 /* helper function for flip_board */
-function flip_line(who, dr, dc, r, c, board){
-    if( (r+dr < 0) || (r+dr > 7) ){
+function flip_line(who, dr, dc, r, c, board) {
+    if ((r + dr < 0) || (r + dr > 7)) {
         return false;
     }
-    if( (c+dc < 0) || (c+dc > 7) ){
+    if ((c + dc < 0) || (c + dc > 7)) {
         return false;
     }
-    if( board[r+dr][c+dc] === ' ' ){
+    if (board[r + dr][c + dc] === ' ') {
         return false;
     }
-    if( board[r+dr][c+dc] === who ){
+    if (board[r + dr][c + dc] === who) {
         return true;
-    }
-    else{
-        if(flip_line(who, dr, dc, r+dr, c+dc, board)){
-            board[r+dr][c+dc] = who;
-            return true;
-        }
-        else{
-            return false;
-        }
+    } else if (flip_line(who, dr, dc, r + dr, c + dc, board)) {
+        board[r + dr][c + dc] = who
+        return true
+    } else {
+        return false
     }
 }
 
@@ -865,11 +875,10 @@ function send_game_update(socket, game_id, message){
     }
     if(count == 0){
         /*Send game over message*/
-        let winner = 'tie game'
+        let winner = 'draw'
         if(black > white){
             winner = 'black'
-        }
-        if(white > black) {
+        }else if(white > black) {
             winner = 'white'
         }
         let success_data = {
@@ -879,6 +888,26 @@ function send_game_update(socket, game_id, message){
             game_id: game_id
         }
         io.in(game_id).emit('game_over', success_data)
+
+        /*Safe game to database after it is over*/
+
+        /*Insert game info*/
+        dbConnection.insertGame(game_id, games[game_id].player_white.username, games[game_id].player_black.username, winner)
+
+        /*Insert moves related to the game*/
+        let aux = gameMovesToStore.filter(o => o.game === game_id)
+
+        aux.forEach(
+            myVar =>
+                dbConnection.insertGameLogMove(myVar.game, myVar['move'].row, myVar['move'].column, myVar['move'].color, myVar['move'].username)
+        )
+
+        /*Delete the game record from the server array*/
+        aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
+
+        /**********/
+
+
         /*Delete old games after 1 hour*/
         setTimeout(function (id){
             return function (){
