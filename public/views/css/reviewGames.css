@@ -1,0 +1,72 @@
+.table-refresh{
+    min-width: 400px;
+    max-width: 1000px;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.table-refresh__table{
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    border-bottom: 2px solid #0c5460;
+}
+
+.table-refresh__table thead tr{
+    background: #0c5460;
+    color: white;
+}
+
+.table-refresh__table th,
+.table-refresh__table td{
+    text-align: left;
+    padding: 9px 18px;
+    font-weight: normal;
+}
+
+.table-refresh__table tbody tr:nth-last-of-type(odd){
+    background: #e9e6e6;
+}
+
+.table-refresh__options{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+}
+
+.table-refresh__options > *:not(:last-child){
+    margin-right: 12px;
+}
+
+.table-refresh__button{
+    background: white;
+    color: grey;
+    border: none;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.table-refresh__button > i{
+    font-size: 1.2em;
+}
+
+.table-refresh__button--refreshing{
+    animation: 0.5s rotate infinite linear;
+}
+
+@keyframes rotate{
+    to{
+        transform: rotate(1turn);
+    }
+}
+
+.table-refresh_label{
+    font-size: 0.8em;
+    color: #999999;
+}

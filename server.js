@@ -65,11 +65,11 @@ app.use(passport.session());
 app.use(methodOverride('_method'));
 
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'public'));
+app.set('views', path.join(__dirname, 'public/views'));
 
 /*Set get methods*/
 app.get('/', checkAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
+    res.redirect('/lobby.html?username=' + req.user.username);
 })
 
 app.get('/register', checkNotAuthenticated, (req, res) => {
@@ -81,10 +81,19 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
 })
 
 app.get('/lobby', checkAuthenticated, (req, res) => {
-
     res.redirect('/lobby.html?username=' + req.user.username)
     //res.render('lobby?username=' + req.user.username);
+})
 
+app.get('/review_games', checkAuthenticated, (req, res) => {
+    //res.sendFile(__dirname + '/public/reviewGames.ejs');
+    dbConnection.getGames().then(function (response){
+        if(response === undefined && response.length == 0){
+            return done(null,false)
+        }else{
+            res.render('reviewGames', {games: response.rows});
+        }
+    }).catch(e => console.error(e.stack))
 })
 
 /*Set post methods*/
