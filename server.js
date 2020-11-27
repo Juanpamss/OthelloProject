@@ -96,6 +96,16 @@ app.get('/review_games', checkAuthenticated, (req, res) => {
     }).catch(e => console.error(e.stack))
 })
 
+app.get('/gameMoves/:gameId', checkAuthenticated, (req, res) => {
+    dbConnection.getGameMoves(req.params.gameId).then(function (response){
+        if(response === undefined && response.length == 0){
+            return done(null,false)
+        }else{
+            res.json(response.rows)
+        }
+    }).catch(e => console.error(e.stack))
+})
+
 /*Set post methods*/
 app.post('/register', async (req, res) => {
     try{

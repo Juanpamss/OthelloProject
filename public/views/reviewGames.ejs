@@ -5,14 +5,119 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="views/css/reviewGames.css">
     <title>Review Games</title>
 </head>
 <body>
-    <% const game = games %>
-    <div class="table-refresh" data-url="/review_games">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2ac3e7;">
+        <a class="navbar-brand" href="/lobby">Othello</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" href="#">Lobby<span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="/review_games">Review Games</a>
+            </div>
+        </div>
+    </nav>
+    <div class="table-refresh" data-url="/data" style="margin-left:auto;margin-right:auto;margin-top: 20px">
     </div>
+    <div id="game_moves" class="table-refresh" data-url-moves="/gameMoves" style="margin-left:auto;margin-right:auto;margin-top: 20px">
+    </div>
+    <script>
+        let dataReceived = '<%- JSON.stringify(games) %>';
+    </script>
+    <script>
+        /*async function  getGameMoves(gameId){
+            const response = await fetch('/gameMoves/' + gameId)
+            const data = await response.json()
+        }*/
+
+        async function  getGameMoves(gameId){
+
+            let x = document.getElementById("game_moves");
+            x.style.display = 'none'
+
+            /*Game moves tables*/
+            for(const root of document.querySelectorAll(".table-refresh[data-url-moves]")){
+                const table = document.createElement('table')
+                //const options = document.createElement('div')
+
+                table.classList.add('table__refresh__table_moves')
+                //options.classList.add('table-refresh__options')
+
+                table.innerHTML = `
+                                    <thead>
+                                        <tr></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Loading</td>
+                                        </tr>
+                                    </tbody>
+                                `;
+                root.append(table)
+
+                const response = await fetch('/gameMoves/' + gameId)
+                const data = await response.json()
+                await showGameDetails(root, data)
+            }
+
+        }
+
+        async function showGameDetails(root, data){
+
+            let dataToDisplay = {
+                rows: []
+            }
+
+            data.forEach(function(message, index){
+                dataToDisplay.rows.push(
+                    [
+                        index,
+                        message['ROW'],
+                        message['COLUMN'],
+                        message['COLOR'],
+                        message['USERNAME']
+                    ]
+                )
+            });
+
+            const table = root.querySelector('.table__refresh__table_moves')
+
+            console.log(table)
+
+            /*Clear table*/
+            table.querySelector("thead tr").innerHTML = ""
+            table.querySelector("tbody tr").innerHTML = ""
+
+            const headers = {
+                headers: ["MOVE #", "ROW", "COLUMN", "COLOR", "PLAYER"]
+            }
+
+            /*Populate headers*/
+            for(const header of headers.headers){
+                table.querySelector("thead tr").insertAdjacentHTML("beforeend",`<th>${header}</th>`)
+            }
+
+            /*Populate rows*/
+            for(const row of dataToDisplay.rows){
+                table.querySelector("tbody").insertAdjacentHTML("beforeend",`
+                <tr>${row.map(col => `<td>${col}</td>`).join("")}</tr>`)
+            }
+
+            let x = document.getElementById("game_moves");
+            x.style.display = 'block'
+
+            //Clear the data to display
+            while (dataToDisplay.rows.length > 0) {
+                dataToDisplay.rows.pop();
+            }
+        }
+
+    </script>
     <script src="views/js/reviewGames.js"></script>
 </body>
 </html>

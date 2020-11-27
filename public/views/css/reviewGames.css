@@ -70,3 +70,43 @@
     font-size: 0.8em;
     color: #999999;
 }
+
+.table-refresh__link{
+
+}
+
+#game_moves{
+    display: none;
+}
+
+
+
+.table-refresh-moves{
+    min-width: 400px;
+    max-width: 1000px;
+    font-size: 14px;
+    font-family: sans-serif;
+}
+
+.table__refresh__table_moves{
+    border-collapse: collapse;
+    width: 100%;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    border-bottom: 2px solid #0c5460;
+}
+
+.table__refresh__table_moves thead tr{
+    background: #0c5460;
+    color: white;
+}
+
+.table__refresh__table_moves th,
+.table__refresh__table_moves td{
+    text-align: left;
+    padding: 9px 18px;
+    font-weight: normal;
+}
+
+.table__refresh__table_moves tbody tr:nth-last-of-type(odd){
+    background: #e9e6e6;
+}

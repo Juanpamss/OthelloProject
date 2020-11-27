@@ -1,9 +1,10 @@
 const insertQuery = 'INSERT INTO public."OthelloUser"("USERNAME", "PASSWORD", "SALT") VALUES($1, $2, $3) RETURNING *'
 const getUserByUsernameQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT"  FROM public."OthelloUser" WHERE "USERNAME" = $1'
-const getUserQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT"  FROM public."OthelloUser" WHERE "ID" = $1'
+const getUserQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT" FROM public."OthelloUser" WHERE "ID" = $1'
 const insertGameQuery = 'INSERT INTO public."Game"("GAME_ID", "WHITE_PLAYER", "BLACK_PLAYER", "WINNER") VALUES($1, $2, $3, $4) RETURNING *'
 const insertGameLogQuery = 'INSERT INTO public."GameLog"("GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME") VALUES($1, $2, $3, $4, $5) RETURNING *'
 const getGameQuery = 'SELECT * FROM public."Game"'
+const getGameMovesQuery = 'SELECT "MOVE_ID", "GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME" FROM public."GameLog" WHERE "GAME_ID" = $1'
 
 const Client = require('pg').Client;
 
@@ -77,6 +78,11 @@ function getGames() {
     return client.query(getGameQuery)
 }
 
+function getGameMoves(gameId) {
+
+    return client.query(getGameMovesQuery, [gameId])
+}
+
 module.exports.connectToDB = connectToDB
 module.exports.insertNewUser = insertNewUser
 module.exports.getUserByUsername = getUserByUsername
@@ -84,3 +90,4 @@ module.exports.getUserById = getUserById
 module.exports.insertGame = insertGame
 module.exports.insertGameLogMove = insertGameLogMove
 module.exports.getGames = getGames
+module.exports.getGameMoves = getGameMoves
