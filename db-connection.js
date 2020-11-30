@@ -5,6 +5,8 @@ const insertGameQuery = 'INSERT INTO public."Game"("GAME_ID", "WHITE_PLAYER", "B
 const insertGameLogQuery = 'INSERT INTO public."GameLog"("GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME") VALUES($1, $2, $3, $4, $5) RETURNING *'
 const getGameQuery = 'SELECT * FROM public."Game"'
 const getGameMovesQuery = 'SELECT "MOVE_ID", "GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME" FROM public."GameLog" WHERE "GAME_ID" = $1'
+const getStatisticsQuery = 'SELECT * FROM public.playerstatistics_view'
+
 
 const Client = require('pg').Client;
 
@@ -83,6 +85,11 @@ function getGameMoves(gameId) {
     return client.query(getGameMovesQuery, [gameId])
 }
 
+function getStatistics() {
+
+    return client.query(getStatisticsQuery)
+}
+
 module.exports.connectToDB = connectToDB
 module.exports.insertNewUser = insertNewUser
 module.exports.getUserByUsername = getUserByUsername
@@ -91,3 +98,4 @@ module.exports.insertGame = insertGame
 module.exports.insertGameLogMove = insertGameLogMove
 module.exports.getGames = getGames
 module.exports.getGameMoves = getGameMoves
+module.exports.getStatistics = getStatistics

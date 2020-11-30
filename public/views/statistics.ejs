@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="views/css/statistics.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+    <title>Statistics</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2ac3e7;">
+    <a class="navbar-brand" href="/lobby">Othello</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" href="/lobby">Lobby<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link" href="/review_games">Review Games</a>
+            <a class="nav-item nav-link" href="/statistics">Statistics</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="container" style="margin-top: 20px">
+                <h3 style="margin-left: 70px">My Statistics</h3>
+                <canvas id="chart" width="400" height="400">
+                </canvas>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="container" style="margin-top: 20px">
+                <div class="row">
+                    <div class="column">
+                        <h3 style="margin-left: 70px">Global Statistics</h3>
+                    </div>
+                </div>
+                <div class="table-refresh" data-url="/data" style="margin-left:auto;margin-right:auto;margin-top: 20px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let data = '<%- JSON.stringify(data) %>'
+</script>
+<script src="views/js/statistics.js"></script>
+</body>
+</html>

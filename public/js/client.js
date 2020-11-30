@@ -143,7 +143,7 @@ socket.on('game_start_response', function (payload){
     $('.socket_' + payload.socket_id + ' button').replaceWith(newNode)
 
     /* jump to a new page */
-    window.location.href = 'game.html?username='+username+'&game_id='+payload.game_id;
+    window.location.replace('game.html?username='+username+'&game_id='+payload.game_id)
 })
 
 /*Response from server when someone leaves*/
@@ -191,7 +191,7 @@ socket.on('game_update', function (payload){
     if(payload.result == 'fail'){
         console.log(payload.message)
         /*Send the user back to the lobby if error occurs*/
-        window.location.href = 'lobby.html?username='+username
+        window.location.replace('lobby.html?username='+username)
         return
     }
     /*Check for board in the payload*/
@@ -207,7 +207,7 @@ socket.on('game_update', function (payload){
         my_color = 'black'
     }else{
         /*In case, unauthorized players are in*/
-        window.location.href = 'lobby.html?username='+username
+        window.location.replace('lobby.html?username='+username)
         return
     }
     $('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')

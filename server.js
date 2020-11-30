@@ -106,6 +106,20 @@ app.get('/gameMoves/:gameId', checkAuthenticated, (req, res) => {
     }).catch(e => console.error(e.stack))
 })
 
+app.get('/statistics', checkAuthenticated, (req, res) => {
+    dbConnection.getStatistics().then(function (response){
+        if(response === undefined && response.length == 0){
+            return done(null,false)
+        }else{
+            res.render('statistics', {data: {
+                    db: response.rows,
+                    user: req.user.username
+                }}
+                );
+        }
+    }).catch(e => console.error(e.stack))
+})
+
 /*Set post methods*/
 app.post('/register', async (req, res) => {
     try{

@@ -181,7 +181,7 @@
     }
 
     /*Game moves tables*/
-    for(const root of document.querySelectorAll(".table-refresh-moves[data-url]")){
+    /*for(const root of document.querySelectorAll(".table-refresh-moves[data-url]")){
         const table = document.createElement('table')
         //const options = document.createElement('div')
 
@@ -198,7 +198,14 @@
                 </tr>
             </tbody>
         `;
+    }*/
+
+    function disposeTable(){
+        let x = document.getElementById('game_moves')
+        x.style.display = 'none'
+        let y = document.getElementById('gameMovesButton')
+        y.style.display = 'none'
+        let z = document.getElementById('gameMovesLabel')
+        z.style.display = 'none'
     }
-
-
 }
