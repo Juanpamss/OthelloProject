@@ -6,30 +6,43 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="views/css/statistics.css">
+    <link rel="shortcut icon" href="assets/images/othelloIcon.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
-    <title>Statistics</title>
+    <title>Othello Game</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #2ac3e7;">
-    <a class="navbar-brand" href="/lobby">Othello</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #b5ecf3">
+    <a class="navbar-brand" href="/lobby">
+        <img src="assets/images/othelloIcon.ico" width="30" height="30" class="d-inline-block align-top" alt="">
+        Othello
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="/lobby">Lobby<span class="sr-only">(current)</span></a>
-            <a class="nav-item nav-link" href="/review_games">Review Games</a>
-            <a class="nav-item nav-link" href="/statistics">Statistics</a>
-        </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-item nav-link active" href="/lobby"><i class="fa fa-fw fa-home"></i>Lobby<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="/review_games"><i class="fa fa-fw fa-book"></i> Review Games</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-item nav-link" href="/statistics"><i class="fa fa-fw fa-line-chart "></i> Statistics</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" action="/logout?_method=DELETE" method="POST">
+            <button type="submit" class="btn btn-dark"><i class="fa fa-sign-out"></i> Sign Out</button>
+        </form>
     </div>
 </nav>
-
 <div class="container">
     <div class="row">
         <div class="col-6">
             <div class="container" style="margin-top: 20px">
-                <h3 style="margin-left: 70px">My Statistics</h3>
+                <h3>My Statistics</h3>
                 <canvas id="chart" width="400" height="400">
                 </canvas>
             </div>
@@ -38,7 +51,7 @@
             <div class="container" style="margin-top: 20px">
                 <div class="row">
                     <div class="column">
-                        <h3 style="margin-left: 70px">Global Statistics</h3>
+                        <h3>Global Statistics</h3>
                     </div>
                 </div>
                 <div class="table-refresh" data-url="/data" style="margin-left:auto;margin-right:auto;margin-top: 20px">

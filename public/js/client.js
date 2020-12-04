@@ -1,12 +1,25 @@
 let username = getURLParameters('username');
-
 let chat_room = getURLParameters('game_id');
+let rejoin = getURLParameters('rejoin');
+
 if('undefined' == typeof chat_room || !chat_room){
     chat_room = 'lobby'
 }
 
 /*Connect to the socket server*/
 const socket = io.connect();
+
+/*Execute this function everytime a client connects to the server*/
+console.log(rejoin)
+$(function (){
+    var payload = {}
+    payload.room = chat_room
+    payload.username = username
+    payload.isRejoin = rejoin
+    //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
+    socket.emit('join_room', payload)
+    $('#quit').append('<a href="lobby.html?username='+username+'" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Quit Game</a>')
+})
 
 /*Receive log messages from server*/
 socket.on('log', function (array){
@@ -145,6 +158,31 @@ socket.on('game_start_response', function (payload){
     /* jump to a new page */
     window.location.replace('game.html?username='+username+'&game_id='+payload.game_id)
 })
+
+/*Game Rejoin*/
+/*Send a game start message to the server*/
+function game_rejoin(gameId, gameInfo){
+    let payload = {};
+    payload.gameIdToRejoin = gameId
+    payload.gameInfo = gameInfo
+    console.log('Client log message: \'game_rejoin\' payload: ' + JSON.stringify(payload))
+    socket.emit('game_rejoin', payload)
+}
+
+/* handle a notification that we have been engaged */
+socket.on('game_rejoin_response', function (payload){
+
+    console.log("Response: " + JSON.stringify(payload))
+
+    if(payload.result == 'fail'){
+        alert(payload.message);
+        return
+    }
+
+    /* jump to a new page */
+    window.location.replace('game.html?username='+username+'&game_id='+payload.game_id+'&rejoin='+true)
+})
+
 
 /*Response from server when someone leaves*/
 socket.on('player_disconnected', function (payload){
@@ -295,14 +333,7 @@ socket.on('game_over', function (payload) {
     $('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>')
     $('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to the lobby</a>')
 })
-$(function (){
-    var payload = {}
-    payload.room = chat_room
-    payload.username = username
-    //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
-    socket.emit('join_room', payload)
-    $('#quit').append('<a href="lobby.html?username='+username+'" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Quit Game</a>')
-})
+
 function getURLParameters(parameterName){
     var pageURL = window.location.search.substring(1)
     var pageURLVariables = pageURL.split('&')

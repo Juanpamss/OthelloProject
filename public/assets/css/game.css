@@ -1,6 +1,6 @@
 body {
     /*background-image: url('../images/Green_Background.jpg');*/
-    background-color: #2b5;
+    background-color: #99cee8;
 }
 
 table#game_board{
@@ -11,7 +11,6 @@ table#game_board{
 }
 
 table#game_board td{
-    padding: 5px;
     border-style: solid;
     border-width: 1px;
     border-color: rgb(50,50,50);
@@ -24,4 +23,52 @@ table#game_board td{
 td.hovered_over:hover{
     background: url('../images/hover(2).png');
     background-size: 100% 100%
+}
+
+/*X-Axis*/
+table#x-axis{
+    margin: auto;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(100,100,100);
+}
+
+table#x-axis td{
+    padding-left: 22px;
+    padding-right: 22px;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(50,50,50);
+}
+
+/*Y-Axis*/
+table#y-axis{
+    margin: auto;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(100,100,100);
+}
+
+table#y-axis td{
+    padding-top: 35px;
+    padding-bottom: 15px;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(50,50,50);
+}
+
+/*Y-Axis*/
+table#z-axis{
+    margin: auto;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(100,100,100);
+}
+
+table#z-axis td{
+    padding-top: 26px;
+    padding-bottom: 26px;
+    border-style: none;
+    border-width: 1px;
+    border-color: rgb(50,50,50);
 }

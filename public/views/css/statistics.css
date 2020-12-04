@@ -1,11 +1,24 @@
+body {
+    background-color: #99cee8;
+}
+
+/* Navbar links */
+.navbar a {
+    float: left;
+    text-align: center;
+    padding: 5px;
+    color: grey;
+    text-decoration: none;
+    font-size: 17px;
+}
+
 .table-refresh{
     min-width: 400px;
     max-width: 1000px;
     font-size: 14px;
     font-family: sans-serif;
     overflow-y:scroll;
-    height: 350px;
-    display:block;
+    height: auto;
 }
 
 .table-refresh__table_statistics{
@@ -16,8 +29,15 @@
 }
 
 .table-refresh__table_statistics thead tr{
-    background: #0c5460;
-    color: white;
+    background: #b5ecf3;
+    border-style: solid;
+    border-width: 2px;
+}
+
+.table-refresh__table_statistics tbody tr{
+    border-style: solid;
+    border-width: 1px;
+    background: #fcfaf7;
 }
 
 .table-refresh__table_statistics th,
@@ -27,9 +47,9 @@
     font-weight: normal;
 }
 
-.table-refresh__table_statistics tbody tr:nth-last-of-type(odd){
+/*.table-refresh__table_statistics tbody tr:nth-last-of-type(odd){
     background: #e9e6e6;
-}
+}*/
 
 .table-refresh__options{
     display: flex;

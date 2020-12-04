@@ -20,16 +20,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/views/css/statistics.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/views/js/statistics.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/views/statistics.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/images/othelloIcon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/css/lobby.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/js/lobby.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db-connection.js" beforeDir="false" afterPath="$PROJECT_DIR$/db-connection.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/assets/css/game.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/css/game.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/game.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/client.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/lobby.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/lobby.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/views/css/reviewGames.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/reviewGames.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/views/css/statistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/statistics.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/views/js/reviewGames.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/js/reviewGames.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/views/js/statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/js/statistics.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/views/reviewGames.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/reviewGames.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/views/statistics.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/statistics.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,8 +48,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -69,12 +76,12 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public" />
       <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -136,7 +143,12 @@
       <workItem from="1606256732214" duration="9120000" />
       <workItem from="1606440109848" duration="15510000" />
       <workItem from="1606496113958" duration="10567000" />
-      <workItem from="1606682225520" duration="10000000" />
+      <workItem from="1606682225520" duration="10592000" />
+      <workItem from="1606772456469" duration="20494000" />
+      <workItem from="1606846774089" duration="20851000" />
+      <workItem from="1606935616607" duration="15995000" />
+      <workItem from="1607013017428" duration="18184000" />
+      <workItem from="1607117891564" duration="3400000" />
     </task>
     <servers />
   </component>
@@ -187,10 +199,10 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="781" y="345" key="SettingsEditor/0.0.2560.1400/2560.349.1920.1040@0.0.2560.1400" timestamp="1606181291699" />
-    <state x="478" y="11" width="580" height="801" key="find.popup" timestamp="1606712218706">
+    <state x="478" y="11" width="580" height="801" key="find.popup" timestamp="1606892131239">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="478" y="11" width="580" height="801" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606712218706" />
+    <state x="478" y="11" width="580" height="801" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606892131239" />
     <state x="425" y="187" width="672" height="677" key="run.anything.popup" timestamp="1606501083889">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

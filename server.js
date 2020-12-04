@@ -57,6 +57,7 @@ app.use(session({
     secret : process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
+    //cookie: { maxAge: 600000 }
 }))
 
 /*Uer passport and session*/
@@ -118,6 +119,13 @@ app.get('/statistics', checkAuthenticated, (req, res) => {
                 );
         }
     }).catch(e => console.error(e.stack))
+})
+
+app.get('/openGames', checkAuthenticated, (req, res) => {
+    res.json({
+        games: games,
+        user: req.user.username
+    })
 })
 
 /*Set post methods*/
@@ -277,8 +285,10 @@ io.sockets.on('connection', function (socket){
         }
 
         log('join_room_success')
+
+        let isRejoin = payload.isRejoin
         if(room !== 'lobby'){
-            send_game_update(socket, room, 'initial update');
+            send_game_update(socket, room, isRejoin ,'initial update');
         }
     });
 
@@ -504,6 +514,71 @@ io.sockets.on('connection', function (socket){
         socket.to(requested_user).emit('game_start_response', success_data_invitee)
 
         log('game_start successful')
+
+    })
+
+    /*rejoin game command*/
+    socket.on('game_rejoin', function (payload){
+        log('game_rejoin with ' + JSON.stringify(payload));
+
+        /*Check that payload was sent*/
+        if(('undefined' === typeof payload) || !payload){
+            const error_message = 'game_rejoin had no payload'
+            log(error_message)
+            socket.emit('game_rejoin_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        /*Check that the message can be traced to a username*/
+        const username = players[socket.id].username
+        if(('undefined' === typeof username) || !username){
+            const error_message = 'game_join cannot identify who sent the message'
+            log(error_message)
+            socket.emit('game_rejoin_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        const gameIdToRejoin = payload.gameIdToRejoin
+        if(('undefined' === typeof gameIdToRejoin) || !gameIdToRejoin){
+            const error_message = 'game_rejoin did not specify a requested_user'
+            log(error_message)
+            socket.emit('game_rejoin_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        let room = players[socket.id].room
+        let roomObject = io.sockets.adapter.rooms[room]
+
+        /*Ensure that user invited is in the room*/
+        /*if(!roomObject.sockets.hasOwnProperty(requested_user)){
+            const error_message = 'game_start requested a user that was not in the room'
+            log(error_message)
+            socket.emit('game_start_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }*/
+
+        const success_data = {
+            result: 'success',
+            socket_id: socket.id,
+            game_id: gameIdToRejoin
+        };
+
+        socket.emit('game_rejoin_response', success_data)
+
+        log('game_rejoin successful')
+
     })
 
     /* play_token command */
@@ -658,8 +733,10 @@ io.sockets.on('connection', function (socket){
         }
         let d = new Date()
         game.last_move_time = d.getTime()
-        send_game_update(socket, game_id, 'played a token')
+        let isRejoin = payload.isRejoin
+        send_game_update(socket, game_id, isRejoin,'played a token')
 
+        console.log(games)
 
         /*Safe a valid move played to store it in database when the game is over*/
         let moveToStore = {}
@@ -830,7 +907,7 @@ function flip_board(who, row, column, board){
     flip_line(who,  1,  1, row, column, board)
 }
 
-function send_game_update(socket, game_id, message){
+function send_game_update(socket, game_id, isRejoin, message){
     /*Check if game with game id already exists*/
     if('undefined' === typeof games[game_id] || !games[game_id]){
         console.log('No game exists. Creating ' + game_id
@@ -859,27 +936,42 @@ function send_game_update(socket, game_id, message){
         }
     }while((numClients-1) > 2)
     /*Assign each socket a color / side*/
-    if((games[game_id].player_white.socket != socket.id) && (games[game_id].player_black.socket != socket.id)){
-        console.log('Player is not assigned a color: ' + socket.id)
-        if((games[game_id].player_black.socket != '') && (games[game_id].player_white.socket != '')){
-            games[game_id].player_white.socket = ''
-            games[game_id].player_white.username = ''
-            games[game_id].player_black.socket = ''
-            games[game_id].player_black.username = ''
-        }
-    }
-    if(games[game_id].player_white.socket == ''){
-        if(games[game_id].player_black.socket != socket.id){
+
+    console.log(isRejoin)
+
+    if(isRejoin){
+        console.log("REJOIN NOW" + isRejoin)
+        if(games[game_id].player_white.username == players[socket.id].username){
             games[game_id].player_white.socket = socket.id
             games[game_id].player_white.username = players[socket.id].username
-        }
-    }
-    if(games[game_id].player_black.socket == ''){
-        if(games[game_id].player_white.socket != socket.id){
+        }else{
             games[game_id].player_black.socket = socket.id
             games[game_id].player_black.username = players[socket.id].username
         }
+    }else{
+        if((games[game_id].player_white.socket != socket.id) && (games[game_id].player_black.socket != socket.id)){
+            console.log('Player is not assigned a color: ' + socket.id)
+            if((games[game_id].player_black.socket != '') && (games[game_id].player_white.socket != '')){
+                games[game_id].player_white.socket = ''
+                games[game_id].player_white.username = ''
+                games[game_id].player_black.socket = ''
+                games[game_id].player_black.username = ''
+            }
+        }
+        if(games[game_id].player_white.socket == ''){
+            if(games[game_id].player_black.socket != socket.id){
+                games[game_id].player_white.socket = socket.id
+                games[game_id].player_white.username = players[socket.id].username
+            }
+        }
+        if(games[game_id].player_black.socket == ''){
+            if(games[game_id].player_white.socket != socket.id){
+                games[game_id].player_black.socket = socket.id
+                games[game_id].player_black.username = players[socket.id].username
+            }
+        }
     }
+
     /*Send game update*/
     let success_data = {
         result: 'success',
@@ -910,9 +1002,9 @@ function send_game_update(socket, game_id, message){
         /*Send game over message*/
         let winner = 'draw'
         if(black > white){
-            winner = 'black'
+            winner = games[game_id].player_black.username
         }else if(white > black) {
-            winner = 'white'
+            winner = games[game_id].player_white.username
         }
         let success_data = {
             result: 'success',
@@ -937,18 +1029,33 @@ function send_game_update(socket, game_id, message){
 
         /*Delete the game record from the server array*/
         aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
-
+        delete games[game_id]
         /**********/
 
 
         /*Delete old games after 1 hour*/
-        setTimeout(function (id){
+        /*setTimeout(function (id){
             return function (){
                 delete games[id]
             }
-        }(game_id), 60*60*1000)
+        }(game_id), 60*60*1000)*/
     }
 }
+
+function send_open_game_update(socket, game_id, message){
+
+    let success_data = {
+        result: 'success',
+        game: games[game_id],
+        message: message,
+        game_id: game_id
+    }
+
+    io.in(game_id).emit('game_open_response', success_data)
+}
+
+
+
 /*Check if the user is logged in, if not redirect to Login page*/
 function checkAuthenticated(req, res, next){
     if(req.isAuthenticated()){
