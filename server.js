@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
-/*Require Postgress module*/
+/*Require Postgres module*/
 const dbConnection = require('./db-connection');
 
 /*Require express module*/
@@ -32,6 +32,10 @@ const methodOverride = require('method-override');
 const path = require('path');
 const fs = require('fs')
 const app = express();
+
+/*Input validation*/
+const { check, validationResult } = require('express-validator');
+const inputValidation = require('./inputValidation.js');
 
 /*Connect to DB*/
 dbConnection.connectToDB();
@@ -121,8 +125,18 @@ app.get('/statistics', checkAuthenticated, (req, res) => {
 })
 
 /*Set post methods*/
-app.post('/register', async (req, res) => {
+/*Input validation for registration: username and password*/
+app.post('/register', [
+    check('username').matches(inputValidation.usernameValidation),
+    check('password').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/)
+    ], async (req, res) => {
     try{
+        /*input validation error handling*/
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            return res.status(422).json({errors:errors.array()})
+        }
+        /*send validated input to db*/
         const saltedHashedPassword = password.generatePassword(req.body.password);
         dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
         console.log("User created")
