@@ -128,12 +128,13 @@ app.get('/statistics', checkAuthenticated, (req, res) => {
 /*Input validation for registration: username and password*/
 app.post('/register', [
     check('username').matches(inputValidation.usernameValidation),
-    check('password').matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$/)
+    check('password').matches(inputValidation.passwordValidation)
     ], async (req, res) => {
     try{
         /*input validation error handling*/
         const errors = validationResult(req)
         if(!errors.isEmpty()){
+            console.log("Invalid username or password sent to server side from registration page.")
             return res.status(422).json({errors:errors.array()})
         }
         /*send validated input to db*/
@@ -146,12 +147,37 @@ app.post('/register', [
     }
 })
 
-app.post('/login', passport.authenticate('local', {
-        successRedirect: '/lobby',
-        failureRedirect: '/login',
-        failureFlash: true
-    })
+/*Input validation for login: username and password*/
+app.post('/login', [
+    check('username').matches(inputValidation.usernameValidation),
+    check('password').matches(inputValidation.passwordValidation)
+    ],
+
+    function(req, res, next){
+        try{
+            /*input validation error handling*/
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                console.log("Invalid username or password sent to server side from login page.")
+                return res.status(422).json({errors:errors.array()})
+            }
+            passport.authenticate('local', function(err, user, info) {
+                if (err) { return next(err); }
+                if (!user) { return res.redirect('/login'); }
+                req.logIn(user, function(err) {
+                    if (err) { return next(err); }
+                    return res.redirect('/lobby');
+                });
+            })(req, res, next);
+
+        }
+        catch{
+            res.redirect('/login')
+        }
+    }
 )
+
+
 
 /*Logout the user*/
 app.delete('/logout', (req, res) => {
