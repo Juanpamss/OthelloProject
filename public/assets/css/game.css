@@ -3,6 +3,27 @@ body {
     background-color: #99cee8;
 }
 
+.flex-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.flex-child {
+    flex: 1;
+    border: 1px solid black;
+    width: 200px;
+}
+
+.flex-child-middle{
+    margin: 30px;
+}
+
+/*.flex-child:first-child {
+    margin-right: 20px;
+}*/
+
 table#game_board{
     margin: auto;
     border-style: solid;

@@ -248,8 +248,13 @@ socket.on('game_update', function (payload){
         window.location.replace('lobby.html?username='+username)
         return
     }
-    $('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')
-    $('#my_color').append('<h4>It is ' + payload.game.whose_turn+'\'s turn</h4>')
+    //$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')
+    $('#my_color').html('<h4>It is ' + payload.game.whose_turn+'\'s turn</h4>')
+
+    /*Update players usernames*/
+    $('#whiteUser').html(`<i class="fa fa-2x fa-user "></i>  ${payload.game.player_white.username}`)
+    $('#blackUser').html(`<i class="fa fa-2x fa-user "></i>  ${payload.game.player_black.username}`)
+
     /*Animate changes to the board*/
     let blacksum = 0
     let whitesum = 0

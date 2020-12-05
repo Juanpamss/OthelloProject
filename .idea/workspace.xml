@@ -20,24 +20,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/assets/images/othelloIcon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/css/lobby.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/js/lobby.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/assets/css/game.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/assets/css/game.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/main.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/game.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/lobby.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/lobby.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/register.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/css/reviewGames.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/reviewGames.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/css/statistics.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/statistics.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/js/reviewGames.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/js/reviewGames.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/js/statistics.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/js/statistics.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/reviewGames.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/reviewGames.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/statistics.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/statistics.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/lobby.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/lobby.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +135,8 @@
       <workItem from="1606846774089" duration="20851000" />
       <workItem from="1606935616607" duration="15995000" />
       <workItem from="1607013017428" duration="18184000" />
-      <workItem from="1607117891564" duration="3400000" />
+      <workItem from="1607117891564" duration="3718000" />
+      <workItem from="1607142128924" duration="4914000" />
     </task>
     <servers />
   </component>

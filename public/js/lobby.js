@@ -23,9 +23,6 @@ async function getOpenGames(){
             }
         }
 
-        /*console.log(dataToDisplay)
-        console.log(data.user)*/
-
         const table = document.querySelector('.table_lobby')
 
         for(const row of dataToDisplay.rows){
