@@ -223,6 +223,9 @@ let old_board = [
     ['?','?','?','?','?','?','?','?']
 ]
 let my_color = ' '
+/*Handle time elapse*/
+let interval_timer;
+
 socket.on('game_update', function (payload){
     console.log('*** Client log message: \'game_update\'\n\tpayload: ' + JSON.stringify(payload))
     /*Check for a board update*/
@@ -248,12 +251,42 @@ socket.on('game_update', function (payload){
         window.location.replace('lobby.html?username='+username)
         return
     }
+<<<<<<< HEAD
     //$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')
     $('#my_color').html('<h4>It is ' + payload.game.whose_turn+'\'s turn</h4>')
 
     /*Update players usernames*/
     $('#whiteUser').html(`<i class="fa fa-2x fa-user "></i>  ${payload.game.player_white.username}`)
     $('#blackUser').html(`<i class="fa fa-2x fa-user "></i>  ${payload.game.player_black.username}`)
+=======
+    $('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')
+    $('#my_color').append('<h4>It is ' + payload.game.whose_turn+'\'s turn. Elapsed time <span id="elapsed"></span></h4>')
+
+    clearInterval(interval_timer);
+    interval_timer = setInterval(function(last_time){
+            return function(){
+                /*update UI*/
+                let d = new Date();
+                let elapsedmilli = d.getTime() - last_time;
+                let minutes = Math.floor(elapsedmilli / (60 * 1000));
+                let seconds = Math.floor((elapsedmilli % (60 * 1000)) / 1000);
+                let timeoutSetting = 12;
+
+                /*Game over if one player takes more than timeout setting to play a token*/
+                if(Math.floor(elapsedmilli/1000) > timeoutSetting && payload.game.whose_turn == my_color){
+                    socket.emit('timeout', my_color);
+                }
+
+                if(seconds < 10){
+                    $('#elapsed').html(minutes + ':0' + seconds);
+                }
+                else{
+                    $('#elapsed').html(minutes + ':' + seconds);
+                }
+            }
+        }(payload.game.last_move_time)
+        , 1000);
+>>>>>>> input-validation-and-clock
 
     /*Animate changes to the board*/
     let blacksum = 0

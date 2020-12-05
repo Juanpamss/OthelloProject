@@ -2,7 +2,7 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
-/*Require Postgress module*/
+/*Require Postgres module*/
 const dbConnection = require('./db-connection');
 
 /*Require express module*/
@@ -32,6 +32,10 @@ const methodOverride = require('method-override');
 const path = require('path');
 const fs = require('fs')
 const app = express();
+
+/*Input validation*/
+const { check, validationResult } = require('express-validator');
+const inputValidation = require('./inputValidation.js');
 
 /*Connect to DB*/
 dbConnection.connectToDB();
@@ -129,8 +133,19 @@ app.get('/openGames', checkAuthenticated, (req, res) => {
 })
 
 /*Set post methods*/
-app.post('/register', async (req, res) => {
+/*Input validation for registration: username and password*/
+app.post('/register', [
+    check('username').matches(inputValidation.usernameValidation),
+    check('password').matches(inputValidation.passwordValidation)
+    ], async (req, res) => {
     try{
+        /*input validation error handling*/
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            console.log("Invalid username or password sent to server side from registration page.")
+            return res.status(422).json({errors:errors.array()})
+        }
+        /*send validated input to db*/
         const saltedHashedPassword = password.generatePassword(req.body.password);
         dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
         console.log("User created")
@@ -140,12 +155,37 @@ app.post('/register', async (req, res) => {
     }
 })
 
-app.post('/login', passport.authenticate('local', {
-        successRedirect: '/lobby',
-        failureRedirect: '/login',
-        failureFlash: true
-    })
+/*Input validation for login: username and password*/
+app.post('/login', [
+    check('username').matches(inputValidation.usernameValidation),
+    check('password').matches(inputValidation.passwordValidation)
+    ],
+
+    function(req, res, next){
+        try{
+            /*input validation error handling*/
+            const errors = validationResult(req)
+            if(!errors.isEmpty()){
+                console.log("Invalid username or password sent to server side from login page.")
+                return res.status(422).json({errors:errors.array()})
+            }
+            passport.authenticate('local', function(err, user, info) {
+                if (err) { return next(err); }
+                if (!user) { return res.redirect('/login'); }
+                req.logIn(user, function(err) {
+                    if (err) { return next(err); }
+                    return res.redirect('/lobby');
+                });
+            })(req, res, next);
+
+        }
+        catch{
+            res.redirect('/login')
+        }
+    }
 )
+
+
 
 /*Logout the user*/
 app.delete('/logout', (req, res) => {
@@ -751,6 +791,35 @@ io.sockets.on('connection', function (socket){
         /***************/
 
     })
+
+    socket.on('timeout', function (myColor) {
+        log('Timeout with ' + JSON.stringify(myColor));
+
+        const game_id = players[socket.id].room;
+        if(('undefined' === typeof game_id) || !game_id){
+            const error_message = 'timeout cannot find your game board'
+            log(error_message)
+            socket.emit('timeout_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+        /*Game state*/
+        const game = games[game_id];
+        if(('undefined' === typeof game) || !game){
+            const error_message = 'timeout cannot find your game board';
+            log(error_message)
+            socket.emit('timeout_response', {
+                result: 'fail',
+                message: error_message
+            })
+            return
+        }
+
+        send_timeout_update(socket, game_id, myColor)
+    })
+
 });
 /*Part of the code related to the game state*/
 let games = {}
@@ -1070,6 +1139,52 @@ function checkNotAuthenticated(req, res, next){
     }
     next()
 }
+
+function send_timeout_update(socket, game_id, myColor){
+
+    /*Send game over message*/
+    let winner = 'draw'
+    if(myColor == 'white'){
+        winner = 'black'
+    }else if(myColor == 'black'){
+        winner = 'white'
+    }
+    let success_data = {
+        result: 'success',
+        game: games[game_id],
+        who_won: winner,
+        game_id: game_id
+    }
+    io.in(game_id).emit('game_over', success_data)
+
+    /*Safe game to database after it is over*/
+
+    /*Insert game info*/
+    dbConnection.insertGame(game_id, games[game_id].player_white.username, games[game_id].player_black.username, winner)
+
+    /*Insert moves related to the game*/
+    let aux = gameMovesToStore.filter(o => o.game === game_id)
+
+    aux.forEach(
+        myVar =>
+            dbConnection.insertGameLogMove(myVar.game, myVar['move'].row, myVar['move'].column, myVar['move'].color, myVar['move'].username)
+    )
+
+    /*Delete the game record from the server array*/
+    aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
+
+    /**********/
+
+
+    /*Delete old games after 1 hour*/
+    setTimeout(function (id){
+        return function (){
+            delete games[id]
+        }
+    }(game_id), 60*60*1000)
+
+}
+
 /*Manage messages from client*/
 /*Construct http server to get file from the file server*/
 /*const server = https.createServer(
