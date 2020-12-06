@@ -28,7 +28,6 @@
     <link rel="stylesheet" type="text/css" href="css/register.css">
     <!--===============================================================================================-->
     <link rel="shortcut icon" href="assets/images/othelloIcon.ico">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
@@ -75,10 +74,10 @@
 
 <script>
     function getURLParameters(parameterName){
-        var pageURL = window.location.search.substring(1)
-        var pageURLVariables = pageURL.split('&')
-        for (var i = 0; i < pageURLVariables.length; i++){
-            var parameter = pageURLVariables[i].split('=')
+        let pageURL = window.location.search.substring(1)
+        let pageURLVariables = pageURL.split('&')
+        for (let i = 0; i < pageURLVariables.length; i++){
+            let parameter = pageURLVariables[i].split('=')
             if(parameter[0] == parameterName){
                 return parameter[1]
             }

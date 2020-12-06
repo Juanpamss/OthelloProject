@@ -139,24 +139,25 @@ app.post('/register', [
     check('password').matches(inputValidation.passwordValidation)
     ], async (req, res) => {
     try{
-        //Check if username was already taken
-        dbConnection.getUserByUsername(req.body.username).then(function (response){
-            if(response === undefined && response.length == 0){
-                /*input validation error handling*/
-                const errors = validationResult(req)
-                if(!errors.isEmpty()){
-                    console.log("Invalid username or password sent to server side from registration page.")
-                    return res.status(422).json({errors:errors.array()})
+        /*input validation error handling*/
+        const errors = validationResult(req)
+        if(!errors.isEmpty()){
+            console.log("Invalid username or password sent to server side from registration page.")
+            return res.redirect('/register')
+        }else{
+            //Check if username was already taken
+            dbConnection.getUserByUsername(req.body.username).then(function (response){
+                if(response.rows == 0){
+                    /*send validated input to db*/
+                    const saltedHashedPassword = password.generatePassword(req.body.password);
+                    dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
+                    console.log("User created")
+                    res.redirect('/login')
+                }else{
+                    res.redirect('/register?fail=' + true)
                 }
-                /*send validated input to db*/
-                const saltedHashedPassword = password.generatePassword(req.body.password);
-                dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
-                console.log("User created")
-                res.redirect('/login')
-            }else{
-                res.redirect('/register?fail=' + true)
-            }
-        });
+            })
+        }
     }catch{
         res.render('register')
     }
@@ -182,25 +183,23 @@ app.post('/login', [
             const errors = validationResult(req)
             if(!errors.isEmpty()){
                 console.log("Invalid username or password sent to server side from login page.")
-                return res.status(422).json({errors:errors.array()})
-            }
-            passport.authenticate('local', function(err, user, info) {
-                if (err) { return next(err); }
-                if (!user) { return res.redirect('/login'); }
-                req.logIn(user, function(err) {
+                return res.redirect('/login')
+            }else{
+                passport.authenticate('local', function(err, user, info) {
                     if (err) { return next(err); }
-                    return res.redirect('/lobby');
-                });
-            })(req, res, next);
-
+                    if (!user) { return res.redirect('/login'); }
+                    req.logIn(user, function(err) {
+                        if (err) { return next(err); }
+                        return res.redirect('/lobby');
+                    });
+                })(req, res, next);
+            }
         }
         catch{
             res.redirect('/login')
         }
     }
 )
-
-
 
 /*Logout the user*/
 app.delete('/logout', (req, res) => {
