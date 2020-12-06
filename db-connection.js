@@ -1,5 +1,5 @@
 const insertQuery = 'INSERT INTO public."OthelloUser"("USERNAME", "PASSWORD", "SALT") VALUES($1, $2, $3) RETURNING *'
-const getUserByUsernameQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT"  FROM public."OthelloUser" WHERE "USERNAME" = $1'
+const getUserByUsernameQuery = 'SELECT "ID", "USERNAME" FROM public."OthelloUser" WHERE "USERNAME" = $1'
 const getUserQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT" FROM public."OthelloUser" WHERE "ID" = $1'
 const insertGameQuery = 'INSERT INTO public."Game"("GAME_ID", "WHITE_PLAYER", "BLACK_PLAYER", "WINNER") VALUES($1, $2, $3, $4) RETURNING *'
 const insertGameLogQuery = 'INSERT INTO public."GameLog"("GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME") VALUES($1, $2, $3, $4, $5) RETURNING *'

@@ -139,19 +139,26 @@ app.post('/register', [
     check('password').matches(inputValidation.passwordValidation)
     ], async (req, res) => {
     try{
-        /*input validation error handling*/
-        const errors = validationResult(req)
-        if(!errors.isEmpty()){
-            console.log("Invalid username or password sent to server side from registration page.")
-            return res.status(422).json({errors:errors.array()})
-        }
-        /*send validated input to db*/
-        const saltedHashedPassword = password.generatePassword(req.body.password);
-        dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
-        console.log("User created")
-        res.redirect('/login')
+        //Check if username was already taken
+        dbConnection.getUserByUsername(req.body.username).then(function (response){
+            if(response === undefined && response.length == 0){
+                /*input validation error handling*/
+                const errors = validationResult(req)
+                if(!errors.isEmpty()){
+                    console.log("Invalid username or password sent to server side from registration page.")
+                    return res.status(422).json({errors:errors.array()})
+                }
+                /*send validated input to db*/
+                const saltedHashedPassword = password.generatePassword(req.body.password);
+                dbConnection.insertNewUser(req.body.username, saltedHashedPassword.hash, saltedHashedPassword.salt)
+                console.log("User created")
+                res.redirect('/login')
+            }else{
+                res.redirect('/register?fail=' + true)
+            }
+        });
     }catch{
-        res.redirect('/register')
+        res.render('register')
     }
 })
 

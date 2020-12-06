@@ -62,3 +62,8 @@ myInput.onkeyup = function() {
         length.classList.add("invalid");
     }
 }
+
+if(error){
+    let errorTag = document.getElementById('errorMessage')
+    errorTag.style.display = 'none'
+}

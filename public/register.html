@@ -28,12 +28,16 @@
     <link rel="stylesheet" type="text/css" href="css/register.css">
     <!--===============================================================================================-->
     <link rel="shortcut icon" href="assets/images/othelloIcon.ico">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+            <div id="errorMessage" class="error_msg" style="margin-bottom: 10px">
+                <span style="color: red">Error! </span><span style="color: black">Username was already taken.</span>
+            </div>
             <form class="login100-form validate-form" action="/register" method="POST">
 					<span class="login100-form-title p-b-33">
 						Register
@@ -68,6 +72,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    function getURLParameters(parameterName){
+        var pageURL = window.location.search.substring(1)
+        var pageURLVariables = pageURL.split('&')
+        for (var i = 0; i < pageURLVariables.length; i++){
+            var parameter = pageURLVariables[i].split('=')
+            if(parameter[0] == parameterName){
+                return parameter[1]
+            }
+        }
+    }
+
+    let errorMessage = getURLParameters('fail');
+
+    if(errorMessage){
+        let errorDiv = document.getElementById('errorMessage')
+        errorDiv.style.display = 'block'
+    }
+</script>
 
 <!--===============================================================================================-->
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>

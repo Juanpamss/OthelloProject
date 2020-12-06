@@ -405,5 +405,14 @@ input.input100 {
   }
 }
 
+.error_msg {
+  width: 400px;
+  padding: 5px;
+  margin: 0px auto;
+  border: 1px dashed #494949;
+  text-align: center;
+  display: none;
+}
+
 
 
