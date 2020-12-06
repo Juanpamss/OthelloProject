@@ -186,10 +186,16 @@ app.post('/login', [
                 return res.redirect('/login')
             }else{
                 passport.authenticate('local', function(err, user, info) {
-                    if (err) { return next(err); }
-                    if (!user) { return res.redirect('/login'); }
+                    if (err) {
+                        return res.redirect('/login?fail=' + true);
+                    }
+                    if (!user) {
+                        return res.redirect('/login?fail=' + true)
+                    }
                     req.logIn(user, function(err) {
-                        if (err) { return next(err); }
+                        if (err) {
+                            return res.redirect('/login?fail=' + true);
+                        }
                         return res.redirect('/lobby');
                     });
                 })(req, res, next);

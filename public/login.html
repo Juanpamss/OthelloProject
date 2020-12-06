@@ -33,6 +33,9 @@
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+            <div id="errorMessage" class="error_msg" style="margin-bottom: 10px">
+                <span style="color: red">Error! </span><span style="color: black">Invalid credentials</span>
+            </div>
             <form class="login100-form validate-form" action="/login" method="POST">
 					<span class="login100-form-title p-b-33">
 						Login
@@ -58,6 +61,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    function getURLParameters(parameterName){
+        let pageURL = window.location.search.substring(1)
+        let pageURLVariables = pageURL.split('&')
+        for (let i = 0; i < pageURLVariables.length; i++){
+            let parameter = pageURLVariables[i].split('=')
+            if(parameter[0] == parameterName){
+                return parameter[1]
+            }
+        }
+    }
+
+    let errorMessage = getURLParameters('fail');
+
+    if(errorMessage){
+        let errorDiv = document.getElementById('errorMessage')
+        errorDiv.style.display = 'block'
+    }
+</script>
 
 <!--===============================================================================================-->
 <script src="vendor/jquery/jquery-3.2.1.min.js"></script>
