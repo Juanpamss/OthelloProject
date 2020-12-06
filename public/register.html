@@ -25,10 +25,12 @@
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="css/util.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/register.css">
     <!--===============================================================================================-->
     <link rel="shortcut icon" href="assets/images/othelloIcon.ico">
 </head>
 <body>
+
 <div class="limiter">
     <div class="container-login100">
         <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
@@ -36,15 +38,24 @@
 					<span class="login100-form-title p-b-33">
 						Register
 					</span>
-                <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+                <div class="wrap-input100 validate-input" data-validate = "Valid username is required: 3-50 letters">
                     <input class="input100" type="text" id="username" name="username" placeholder="Username">
                     <span class="focus-input100-1"></span>
                     <span class="focus-input100-2"></span>
                 </div>
                 <div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
-                    <input class="input100" type="password" id="password" name="password" placeholder="Password">
+                    <input class="input100" type="password" id="password" name="password" placeholder="Password" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,50}$"
+                        title="Must contain at least one number and one uppercase and lowercase letter and one special character, and at least 8 or more characters" required>
                     <span class="focus-input100-1"></span>
                     <span class="focus-input100-2"></span>
+                </div>
+                <div id="message">
+                    <h6>Password must contain the following:</h6>
+                    <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+                    <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+                    <p id="number" class="invalid">A <b>number</b></p>
+                    <p id="special" class="invalid">A <b>special character</b> [@$!%*?&]</p>
+                    <p id="length" class="invalid">Minimum <b>8 characters</b></p>
                 </div>
                 <div class="container-login100-form-btn m-t-20">
                     <button class="login100-form-btn" type="submit">Register</button>
@@ -73,6 +84,6 @@
 <!--===============================================================================================-->
 <script src="vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
-
+<script src="js/frontendValidation.js"></script>
 </body>
 </html>

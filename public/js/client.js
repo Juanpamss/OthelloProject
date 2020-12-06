@@ -268,7 +268,7 @@ socket.on('game_update', function (payload){
                 let elapsedmilli = d.getTime() - last_time;
                 let minutes = Math.floor(elapsedmilli / (60 * 1000));
                 let seconds = Math.floor((elapsedmilli % (60 * 1000)) / 1000);
-                let timeoutSetting = 12;
+                let timeoutSetting = 60;
 
                 /*Game over if one player takes more than timeout setting to play a token*/
                 if(Math.floor(elapsedmilli/1000) > timeoutSetting && payload.game.whose_turn == my_color){

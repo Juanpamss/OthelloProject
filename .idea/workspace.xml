@@ -35,8 +35,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -63,12 +63,13 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public\js" />
+      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public" />
       <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
     </key>
   </component>
   <component name="RunAnythingCache">
