@@ -155,6 +155,14 @@ app.post('/register', [
     }
 })
 
+/*Old Login*/
+/*app.post('/login', passport.authenticate('local', {
+        successRedirect: '/lobby',
+        failureRedirect: '/login',
+        failureFlash: true
+    })
+)*/
+
 /*Input validation for login: username and password*/
 app.post('/login', [
     check('username').matches(inputValidation.usernameValidation),
@@ -163,7 +171,7 @@ app.post('/login', [
 
     function(req, res, next){
         try{
-            /*input validation error handling*/
+            //input validation error handling
             const errors = validationResult(req)
             if(!errors.isEmpty()){
                 console.log("Invalid username or password sent to server side from login page.")
