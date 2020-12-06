@@ -1,5 +1,6 @@
 const insertQuery = 'INSERT INTO public."OthelloUser"("USERNAME", "PASSWORD", "SALT") VALUES($1, $2, $3) RETURNING *'
 const getUserByUsernameQuery = 'SELECT "ID", "USERNAME" FROM public."OthelloUser" WHERE "USERNAME" = $1'
+const getUserByUsernameQueryForAuthentication = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT"  FROM public."OthelloUser" WHERE "USERNAME" = $1'
 const getUserQuery = 'SELECT "ID", "USERNAME", "PASSWORD", "SALT" FROM public."OthelloUser" WHERE "ID" = $1'
 const insertGameQuery = 'INSERT INTO public."Game"("GAME_ID", "WHITE_PLAYER", "BLACK_PLAYER", "WINNER") VALUES($1, $2, $3, $4) RETURNING *'
 const insertGameLogQuery = 'INSERT INTO public."GameLog"("GAME_ID", "ROW", "COLUMN", "COLOR", "USERNAME") VALUES($1, $2, $3, $4, $5) RETURNING *'
@@ -30,6 +31,11 @@ function connectToDB(){
 function getUserByUsername(username) {
 
     return client.query(getUserByUsernameQuery, [username])
+}
+
+function getUserByUsernameForAuthentication(username) {
+
+    return client.query(getUserByUsernameQueryForAuthentication, [username])
 }
 
 function getUserById(userId) {
@@ -93,6 +99,7 @@ function getStatistics() {
 module.exports.connectToDB = connectToDB
 module.exports.insertNewUser = insertNewUser
 module.exports.getUserByUsername = getUserByUsername
+module.exports.getUserByUsernameForAuthentication = getUserByUsernameForAuthentication
 module.exports.getUserById = getUserById
 module.exports.insertGame = insertGame
 module.exports.insertGameLogMove = insertGameLogMove

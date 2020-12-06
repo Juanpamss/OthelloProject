@@ -7,7 +7,7 @@ const customOptions = {
     passwordField: 'password'
 }
 const verifyCallback = (username, password, done) => {
-    dbConnection.getUserByUsername(username).then(function (res){
+    dbConnection.getUserByUsernameForAuthentication(username).then(function (res){
         if(res === undefined && res.length == 0){
             return done(null,false)
         }else{
