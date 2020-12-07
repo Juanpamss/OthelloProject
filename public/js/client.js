@@ -225,6 +225,7 @@ let old_board = [
 let my_color = ' '
 /*Handle time elapse*/
 let interval_timer;
+let gameTimedout = false;
 
 socket.on('game_update', function (payload){
     console.log('*** Client log message: \'game_update\'\n\tpayload: ' + JSON.stringify(payload))
@@ -266,15 +267,31 @@ socket.on('game_update', function (payload){
                 /*update UI*/
                 let d = new Date();
                 let elapsedmilli = d.getTime() - last_time;
-                let minutes = Math.floor(elapsedmilli / (60 * 1000));
-                let seconds = Math.floor((elapsedmilli % (60 * 1000)) / 1000);
                 let timeoutSetting = 60;
 
                 /*Game over if one player takes more than timeout setting to play a token*/
                 if(Math.floor(elapsedmilli/1000) > timeoutSetting && payload.game.whose_turn == my_color){
-                    socket.emit('timeout', my_color);
+                    /*disable play token for frontend*/
+                    for (let timeoutRow = 0; timeoutRow < 8; timeoutRow++) {
+                        for (let timeoutColumn = 0; timeoutColumn < 8; timeoutColumn++) {
+                            $('#' + timeoutRow + '_' + timeoutColumn).off('click')
+                            $('#' + timeoutRow + '_' + timeoutColumn).removeClass('hovered_over')
+                        }
+                    }
+
+                    if(gameTimedout != true){
+                        socket.emit('timeout', my_color);
+                        gameTimedout = true;
+
+                    }
+                    else{
+                        /*game reached time limit, stop action*/
+                    }
+
                 }
 
+                let minutes = Math.floor(elapsedmilli / (60 * 1000));
+                let seconds = Math.floor((elapsedmilli % (60 * 1000)) / 1000);
                 if(seconds < 10){
                     $('#elapsed').html(minutes + ':0' + seconds);
                 }
