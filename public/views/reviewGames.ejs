@@ -61,21 +61,21 @@
         let dataReceived = '<%- JSON.stringify(games) %>';
     </script>
     <script src="views/js/reviewGames.js"></script>
-    <script>
+<script>
 
-        async function  getGameMoves(gameId){
+    async function  getGameMoves(gameId){
 
-            let root
+        let root
 
-            /*Game moves tables*/
-            for(root of document.querySelectorAll(".table-refresh-moves")){
-                const table = document.createElement('table')
-                //const options = document.createElement('div')
+        /*Game moves tables*/
+        for(root of document.querySelectorAll(".table-refresh-moves")){
+            const table = document.createElement('table')
+            //const options = document.createElement('div')
 
-                if(!table.classList.contains('table__refresh__table_moves')){
-                    table.classList.add('table__refresh__table_moves')
+            if(!table.classList.contains('table__refresh__table_moves')){
+                table.classList.add('table__refresh__table_moves')
 
-                    table.innerHTML = `
+                table.innerHTML = `
                                     <thead>
                                         <tr></tr>
                                     </thead>
@@ -85,74 +85,73 @@
                                         </tr>
                                     </tbody>
                                 `;
-                    root.append(table)
-                }
+                root.append(table)
             }
-
-            const response = await fetch('/gameMoves/' + gameId)
-            const data = await response.json()
-            await showGameDetails(root, data)
         }
 
-        async function showGameDetails(root, data){
+        const response = await fetch('/gameMoves/' + gameId)
+        const data = await response.json()
+        await showGameDetails(root, data)
+    }
 
-            let dataToDisplay = {
-                rows: []
-            }
+    async function showGameDetails(root, data){
 
-            data.forEach(function(message, index){
-                dataToDisplay.rows.push(
-                    [
-                        index+1,
-                        message['ROW'],
-                        message['COLUMN'],
-                        message['COLOR'],
-                        message['USERNAME']
-                    ]
-                )
-            });
+        let dataToDisplay = {
+            rows: []
+        }
 
-            console.log(dataToDisplay.rows)
+        data.forEach(function(message, index){
+            dataToDisplay.rows.push(
+                [
+                    index+1,
+                    message['COLUMN'],
+                    message['ROW'],
+                    message['COLOR'],
+                    message['USERNAME']
+                ]
+            )
+        });
 
-            const table = root.querySelector('.table__refresh__table_moves')
+        console.log(dataToDisplay.rows)
 
-            /*Clear table*/
-            table.querySelector("thead tr").innerHTML = ""
-            table.querySelector("tbody tr").innerHTML = ""
+        const table = root.querySelector('.table__refresh__table_moves')
 
-            clearTable()
+        /*Clear table*/
+        table.querySelector("thead tr").innerHTML = ""
+        table.querySelector("tbody tr").innerHTML = ""
 
-            const headers = {
-                headers: ["MOVE #", "ROW", "COLUMN", "COLOR", "PLAYER"]
-            }
+        clearTable()
 
-            /*Populate headers*/
-            for(const header of headers.headers){
-                table.querySelector("thead tr").insertAdjacentHTML("beforeend",`<th>${header}</th>`)
-            }
+        const headers = {
+            headers: ["MOVE #", "COLUMN", "ROW", "COLOR", "PLAYER"]
+        }
 
-            /*Populate rows*/
-            for(const row of dataToDisplay.rows){
-                table.querySelector("tbody").insertAdjacentHTML("beforeend",`
+        /*Populate headers*/
+        for(const header of headers.headers){
+            table.querySelector("thead tr").insertAdjacentHTML("beforeend",`<th>${header}</th>`)
+        }
+
+        /*Populate rows*/
+        for(const row of dataToDisplay.rows){
+            table.querySelector("tbody").insertAdjacentHTML("beforeend",`
                 <tr>${row.map(col => `<td>${col}</td>`).join("")}</tr>`)
-            }
-
-            let x = document.getElementById("game_moves");
-            x.style.display = 'block'
-
-            let y = document.getElementById('gameMovesButton')
-            y.style.display = 'block'
-
-            let z = document.getElementById('gameMovesLabel')
-            z.style.display = 'block'
-
-            //Clear the data to display
-            while (dataToDisplay.rows.length > 0) {
-                dataToDisplay.rows.pop();
-            }
         }
 
-    </script>
+        let x = document.getElementById("game_moves");
+        x.style.display = 'block'
 
+        let y = document.getElementById('gameMovesButton')
+        y.style.display = 'block'
+
+        let z = document.getElementById('gameMovesLabel')
+        z.style.display = 'block'
+
+        //Clear the data to display
+        while (dataToDisplay.rows.length > 0) {
+            dataToDisplay.rows.pop();
+        }
+    }
+
+</script>
 </body>
 </html>

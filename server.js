@@ -236,6 +236,16 @@ console.log('Server running at: ' + port)
 /*****Configure socket server*****/
 let players = []
 let gameMovesToStore = []
+const columnReference = {
+    0: 'A',
+    1: 'B',
+    2: 'C',
+    3: 'D',
+    4: 'E',
+    5: 'F',
+    6: 'G',
+    7: 'H'
+}
 
 const io = require('socket.io').listen(server)
 
@@ -809,8 +819,8 @@ io.sockets.on('connection', function (socket){
         let moveToStore = {}
         moveToStore.game = game_id
         moveToStore.move = {
-            row: row,
-            column: column,
+            row: row+1,
+            column: columnReference[column],
             color: color,
             username: username
         }
@@ -1172,9 +1182,9 @@ function send_timeout_update(socket, game_id, myColor){
     /*Send game over message*/
     let winner = 'draw'
     if(myColor == 'white'){
-        winner = 'black'
+        winner = games[game_id].player_black.username
     }else if(myColor == 'black'){
-        winner = 'white'
+        winner = games[game_id].player_white.username
     }
     let success_data = {
         result: 'success',
@@ -1199,7 +1209,7 @@ function send_timeout_update(socket, game_id, myColor){
 
     /*Delete the game record from the server array*/
     aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
-
+    delete games[game_id]
     /**********/
 
 

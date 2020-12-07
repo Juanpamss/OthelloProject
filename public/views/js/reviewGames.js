@@ -1,31 +1,31 @@
 {
     async function  getGameMoves(gameId){
 
-        const root = ''
+        let root
 
         /*Game moves tables*/
-        for(root of document.querySelectorAll(".table-refresh")){
+        for(root of document.querySelectorAll(".table-refresh-moves")){
             const table = document.createElement('table')
             //const options = document.createElement('div')
 
-            table.classList.add('table-refresh__table__moves')
-            //options.classList.add('table-refresh__options')
+            if(!table.classList.contains('table__refresh__table_moves')){
+                table.classList.add('table__refresh__table_moves')
 
-            table.innerHTML = `
-            <thead>
-                <tr></tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Loading</td>
-                </tr>
-            </tbody>
-        `;
-
-            root.append(table)
+                table.innerHTML = `
+                                    <thead>
+                                        <tr></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Loading</td>
+                                        </tr>
+                                    </tbody>
+                                `;
+                root.append(table)
+            }
         }
 
-        const response = await fetch('/gameMoves' + gameId)
+        const response = await fetch('/gameMoves/' + gameId)
         const data = await response.json()
         await showGameDetails(root, data)
     }
@@ -36,30 +36,30 @@
             rows: []
         }
 
-        console.log("Data: " + dataToDisplay)
-
-        data.forEach(function(message){
+        data.forEach(function(message, index){
             dataToDisplay.rows.push(
                 [
-                    message['ROW'],
+                    index+1,
                     message['COLUMN'],
+                    message['ROW'],
                     message['COLOR'],
                     message['USERNAME']
                 ]
             )
         });
 
-        console.log(dataToDisplay)
+        console.log(dataToDisplay.rows)
 
-        //root.querySelector('.table-refresh__button').classList.add("table-refresh__button-refreshing")
         const table = root.querySelector('.table__refresh__table_moves')
 
         /*Clear table*/
         table.querySelector("thead tr").innerHTML = ""
         table.querySelector("tbody tr").innerHTML = ""
 
+        clearTable()
+
         const headers = {
-            headers: ["ROW", "COLUMN", "COLOR", "PLAYER"]
+            headers: ["MOVE #", "COLUMN", "ROW", "COLOR", "PLAYER"]
         }
 
         /*Populate headers*/
@@ -75,6 +75,12 @@
 
         let x = document.getElementById("game_moves");
         x.style.display = 'block'
+
+        let y = document.getElementById('gameMovesButton')
+        y.style.display = 'block'
+
+        let z = document.getElementById('gameMovesLabel')
+        z.style.display = 'block'
 
         //Clear the data to display
         while (dataToDisplay.rows.length > 0) {
