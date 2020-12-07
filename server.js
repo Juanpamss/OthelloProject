@@ -2,6 +2,9 @@ if(process.env.NODE_ENV !== 'production'){
     require('dotenv').config()
 }
 
+/*Require TLS*/
+const tls = require('tls')
+
 /*Require Postgres module*/
 const dbConnection = require('./db-connection');
 
@@ -47,7 +50,7 @@ var directory = __dirname + '/public';
 /*If this is not a web server, the readjust the port to localhost*/
 if(typeof port == 'undefined' || port){
     directory = './public';
-    port = 8080;
+    port = 443;
 }
 
 /*Setting Login*/
@@ -217,9 +220,13 @@ app.delete('/logout', (req, res) => {
 //var file = new static.Server(directory);
 
 const httpsOptions = {
-    cert: fs.readFileSync(path.join(__dirname,'ssl','cert.crt')),
-    key: fs.readFileSync(path.join(__dirname,'ssl', 'key.key')),
-    requestCert: false
+    isServer: true,
+    cert: fs.readFileSync(path.join(__dirname,'ssl2','server-crt.crt')),
+    key: fs.readFileSync(path.join(__dirname,'ssl2','server-key.pem')),
+    ca: fs.readFileSync(path.join(__dirname,'ssl2','ca-crt.crt')),
+    requestCert: true,
+    rejectUnauthorized: true,
+    maxVersion: tls.DEFAULT_MAX_VERSION
 }
 
 let server = https.createServer(httpsOptions,app).listen(port);

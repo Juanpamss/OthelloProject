@@ -9,19 +9,13 @@ const getGameMovesQuery = 'SELECT "MOVE_ID", "GAME_ID", "ROW", "COLUMN", "COLOR"
 const getStatisticsQuery = 'SELECT * FROM public.playerstatistics_view'
 
 
-const Client = require('pg').Client;
+const {Client} = require('pg')
 
-const client = new Client({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'OthelloProject',
-    password: 'gibson',
-    port: 5432
-})
+const server = new Client()
 
 function connectToDB(){
     try{
-        client.connect()
+        server.connect()
         console.log("Connected to DB")
     }catch(e){
         console.log(e)
@@ -30,22 +24,22 @@ function connectToDB(){
 
 function getUserByUsername(username) {
 
-    return client.query(getUserByUsernameQuery, [username])
+    return server.query(getUserByUsernameQuery, [username])
 }
 
 function getUserByUsernameForAuthentication(username) {
 
-    return client.query(getUserByUsernameQueryForAuthentication, [username])
+    return server.query(getUserByUsernameQueryForAuthentication, [username])
 }
 
 function getUserById(userId) {
 
-    return client.query(getUserQuery, [userId])
+    return server.query(getUserQuery, [userId])
 }
 
 function insertNewUser(user, password, salt){
     try{
-        client
+        server
             .query(insertQuery, [user, password, salt])
             .then(res => {
                 //console.log(res.rows)
@@ -58,7 +52,7 @@ function insertNewUser(user, password, salt){
 
 function insertGame(gameId, whitePlayer, blackPlayer, winner){
     try{
-        client
+        server
             .query(insertGameQuery, [gameId, whitePlayer, blackPlayer, winner])
             .then(res => {
                 //console.log(res.rows)
@@ -71,7 +65,7 @@ function insertGame(gameId, whitePlayer, blackPlayer, winner){
 
 function insertGameLogMove(gameId, row, column, color, username){
     try{
-        client
+        server
             .query(insertGameLogQuery, [gameId, row, column,color,username])
             .then(res => {
                 //console.log(res.rows)
@@ -83,17 +77,17 @@ function insertGameLogMove(gameId, row, column, color, username){
 }
 
 function getGames() {
-    return client.query(getGameQuery)
+    return server.query(getGameQuery)
 }
 
 function getGameMoves(gameId) {
 
-    return client.query(getGameMovesQuery, [gameId])
+    return server.query(getGameMovesQuery, [gameId])
 }
 
 function getStatistics() {
 
-    return client.query(getStatisticsQuery)
+    return server.query(getStatisticsQuery)
 }
 
 module.exports.connectToDB = connectToDB
