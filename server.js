@@ -146,7 +146,7 @@ app.post('/register', [
         const errors = validationResult(req)
         if(!errors.isEmpty()){
             console.log("Invalid username or password sent to server side from registration page.")
-            return res.redirect('/register')
+            return res.redirect('/register?fail=' + true)
         }else{
             //Check if username was already taken
             dbConnection.getUserByUsername(req.body.username).then(function (response){
@@ -186,7 +186,7 @@ app.post('/login', [
             const errors = validationResult(req)
             if(!errors.isEmpty()){
                 console.log("Invalid username or password sent to server side from login page.")
-                return res.redirect('/login')
+                return res.redirect('/login?fail=' + true)
             }else{
                 passport.authenticate('local', function(err, user, info) {
                     if (err) {
