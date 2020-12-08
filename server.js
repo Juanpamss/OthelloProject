@@ -249,9 +249,14 @@ app.delete('/logout', (req, res) => {
     res.redirect('/login');
 })
 
+// Handle 404 - Keep this as a last route
+app.use(function(req, res, next) {
+    res.status(404);
+    res.render('notFound');
+});
+
 /*Set up static web server*/
 const httpsOptions = {
-    isServer: true,
     cert: fs.readFileSync(path.join(__dirname,'ssl','server-crt.pem')),
     key: fs.readFileSync(path.join(__dirname,'ssl','server-key.pem')),
     ca: fs.readFileSync(path.join(__dirname,'ssl','ca-crt.pem')),

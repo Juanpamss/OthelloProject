@@ -38,7 +38,7 @@
                 <span style="color: red">Error! </span><span style="color: black">Username was already taken</span>
             </div>
             <form class="login100-form validate-form" action="/register" method="POST" autocomplete="off">
-                <input type="hidden" name="csrf" >
+                <input type="hidden" name="csrf" value='<%= token %>'>
 					<span class="login100-form-title p-b-33">
 						Register
 					</span>

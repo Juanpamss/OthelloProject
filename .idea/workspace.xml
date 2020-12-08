@@ -20,26 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/views/errorPage.ejs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/ca-crt.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/ca-crt.srl" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/ca-key.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/client1-crt.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/client1-csr.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/client1-key.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/private_certificate.pfx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/server-crt.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/server-csr.pem" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ssl/server-key.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/views/notFound.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/game.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/frontendValidation.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/frontendValidation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/login.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/register.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/css/reviewGames.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/reviewGames.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/views/register.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/register.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,7 +55,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/views" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="project.propDebugger" />
@@ -80,13 +63,14 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public" />
-      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
       <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public\js" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
+      <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public" />
+      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -167,7 +151,7 @@
       <workItem from="1607317014874" duration="3377000" />
       <workItem from="1607331939320" duration="662000" />
       <workItem from="1607359344393" duration="15900000" />
-      <workItem from="1607387493720" duration="4888000" />
+      <workItem from="1607387493720" duration="12597000" />
     </task>
     <servers />
   </component>
