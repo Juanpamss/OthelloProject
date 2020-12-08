@@ -10,15 +10,13 @@ if('undefined' == typeof chat_room || !chat_room){
 const socket = io.connect();
 
 /*Execute this function everytime a client connects to the server*/
-console.log(rejoin)
 $(function (){
-    var payload = {}
-    payload.room = chat_room
-    payload.username = username
-    payload.isRejoin = rejoin
-    //console.log('*** Client log message: \'join_room\' payload: ' + JSON.stringify(payload));
+    let payload = {}
+    payload.room = sanitizeInput(chat_room)
+    payload.username = sanitizeInput(username)
+    payload.isRejoin = rejoin != undefined ? sanitizeInput(rejoin) : rejoin
     socket.emit('join_room', payload)
-    $('#quit').append('<a href="lobby.html?username='+username+'" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Quit Game</a>')
+    $('#quit').append('<a href="lobby.html?username='+sanitizeInput(username)+'" class="btn btn-danger btn-lg active" role="button" aria-pressed="true">Quit Game</a>')
 })
 
 /*Receive log messages from server*/
@@ -156,7 +154,7 @@ socket.on('game_start_response', function (payload){
     $('.socket_' + payload.socket_id + ' button').replaceWith(newNode)
 
     /* jump to a new page */
-    window.location.replace('game.html?username='+username+'&game_id='+payload.game_id)
+    window.location.replace('game.html?username='+sanitizeInput(username)+'&game_id='+payload.game_id)
 })
 
 /*Game Rejoin*/
@@ -180,7 +178,7 @@ socket.on('game_rejoin_response', function (payload){
     }
 
     /* jump to a new page */
-    window.location.replace('game.html?username='+username+'&game_id='+payload.game_id+'&rejoin='+true)
+    window.location.replace('game.html?username='+sanitizeInput(username)+'&game_id='+payload.game_id+'&rejoin='+true)
 })
 
 
@@ -195,15 +193,15 @@ socket.on('player_disconnected', function (payload){
     }
 
     /*When someone joins the room*/
-    var dom_elements = $('.socket_'+payload.socket_id);
+    let dom_elements = $('.socket_'+payload.socket_id);
 
     if(dom_elements.length !=  0){
         dom_elements.slideUp(1000);
     }
 
     /*Chat messages*/
-    var newHTML = '<p>' + payload.username + ' left the lobby</p>';
-    var newNode = $(newHTML);
+    let newHTML = '<p>' + payload.username + ' left the lobby</p>';
+    let newNode = $(newHTML);
     newNode.hide();
     $('#messages').prepend(newNode);
     newNode.slideDown(1000);
@@ -233,7 +231,7 @@ socket.on('game_update', function (payload){
     if(payload.result == 'fail'){
         console.log(payload.message)
         /*Send the user back to the lobby if error occurs*/
-        window.location.replace('lobby.html?username='+username)
+        window.location.replace('lobby.html?username='+sanitizeInput(username))
         return
     }
     /*Check for board in the payload*/
@@ -249,7 +247,7 @@ socket.on('game_update', function (payload){
         my_color = 'black'
     }else{
         /*In case, unauthorized players are in*/
-        window.location.replace('lobby.html?username='+username)
+        window.location.replace('lobby.html?username='+sanitizeInput(username))
         return
     }
     //$('#my_color').html('<h3 id="my_color">I am '+my_color+'</h3>')
@@ -365,7 +363,7 @@ socket.on('game_update', function (payload){
     old_board = board
 })
 socket.on('play_token_response', function (payload) {
-    console.log('*** Client log message: \'play_token_response\'\n\tpayload: ' + JSON.stringify(payload))
+    //console.log('*** Client log message: \'play_token_response\'\n\tpayload: ' + JSON.stringify(payload))
     /*Check for token response*/
     if (payload.result == 'fail') {
         console.log(payload.message)
@@ -374,7 +372,7 @@ socket.on('play_token_response', function (payload) {
     }
 })
 socket.on('game_over', function (payload) {
-    console.log('*** Client log message: \'game_over\'\n\tpayload: ' + JSON.stringify(payload))
+    //console.log('*** Client log message: \'game_over\'\n\tpayload: ' + JSON.stringify(payload))
     /*Check for token response*/
     if (payload.result == 'fail') {
         console.log(payload.message)
@@ -385,45 +383,53 @@ socket.on('game_over', function (payload) {
     $('#game_over').html('<h1>Game Over</h1><h2>'+payload.who_won+' won!</h2>')
     //This line was detected as a security issue by OWASP, note this on the report
     //$('#game_over').append('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to the lobby</a>')
-    $('#game_over').html('<a href="lobby.html?username='+username+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to the lobby</a>')
+    $('#return_lobby').html('<a href="lobby.html?username='+sanitizeInput(username)+'" class="btn btn-success btn-lg active" role="button" aria-pressed="true">Return to the lobby</a>')
 })
 
 function getURLParameters(parameterName){
-    var pageURL = window.location.search.substring(1)
-    var pageURLVariables = pageURL.split('&')
-    for (var i = 0; i < pageURLVariables.length; i++){
-        var parameter = pageURLVariables[i].split('=')
+    let pageURL = window.location.search.substring(1)
+    let pageURLVariables = pageURL.split('&')
+    for (let i = 0; i < pageURLVariables.length; i++){
+        let parameter = pageURLVariables[i].split('=')
         if(parameter[0] == parameterName){
-            return parameter[1]
+            return sanitizeInput(parameter[1])
         }
     }
 }
 function makeInviteButton(socket_id){
-    var newHTML = '<button type=\'button\' class=\'btn btn-outline-primary\'>Invite</button>'
-    var newNode = $(newHTML)
+    let newHTML = '<button type=\'button\' class=\'btn btn-outline-primary\'>Invite</button>'
+    let newNode = $(newHTML)
     newNode.click(function (){
         invite(socket_id)
     })
     return newNode
 }
 function makeInvitedButton(socket_id){
-    var newHTML = '<button type=\'button\' class=\'btn btn-primary\'>Invited</button>'
-    var newNode = $(newHTML)
+    let newHTML = '<button type=\'button\' class=\'btn btn-primary\'>Invited</button>'
+    let newNode = $(newHTML)
     newNode.click(function (){
         uninvite(socket_id)
     })
     return newNode
 }
 function makePlayButton(socket_id){
-    var newHTML = '<button type=\'button\' class=\'btn btn-success\'>Play</button>'
-    var newNode = $(newHTML)
+    let newHTML = '<button type=\'button\' class=\'btn btn-success\'>Play</button>'
+    let newNode = $(newHTML)
     newNode.click(function (){
         game_start(socket_id)
     })
     return newNode
 }
 function makeEngagedButton(){
-    var newHTML = '<button type=\'button\' class=\'btn btn-danger\'>Engage</button>'
-    var newNode = $(newHTML)
+    let newHTML = '<button type=\'button\' class=\'btn btn-danger\'>Engage</button>'
+    let newNode = $(newHTML)
     return newNode
+}
+
+function sanitizeInput(input){
+    const regex = /[^0-9a-zA-Z._-]/g
+    /*Sanitize the input prior to send it to the server. On the server side, this process is redone to ensure
+            no harmful data reaches the server*/
+    let sanitizedString = input.replace(regex, '')
+    return sanitizedString
 }

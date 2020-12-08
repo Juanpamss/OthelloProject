@@ -20,9 +20,26 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4c45cdae-3a21-415b-bcc5-369d8bb2f640" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/views/errorPage.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/ca-crt.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/ca-crt.srl" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/ca-key.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/client1-crt.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/client1-csr.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/client1-key.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/private_certificate.pfx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/server-crt.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/server-csr.pem" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ssl/server-key.pem" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/js/reviewGames.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/js/reviewGames.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/views/reviewGames.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/reviewGames.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/game.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/client.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/client.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/frontendValidation.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/frontendValidation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/login.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/register.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/views/css/reviewGames.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/views/css/reviewGames.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,9 +50,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -63,13 +80,13 @@
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public\js" />
-      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public" />
       <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\GitHub\OthelloProject\OthelloProject\public\views" />
+      <recent name="C:\Users\Xiarong\Documents\GitHub\OthelloProject\public\js" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -148,6 +165,9 @@
       <workItem from="1607289467708" duration="327000" />
       <workItem from="1607311632007" duration="2545000" />
       <workItem from="1607317014874" duration="3377000" />
+      <workItem from="1607331939320" duration="662000" />
+      <workItem from="1607359344393" duration="15900000" />
+      <workItem from="1607387493720" duration="4888000" />
     </task>
     <servers />
   </component>

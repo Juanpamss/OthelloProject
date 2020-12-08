@@ -1,9 +1,11 @@
-if(process.env.NODE_ENV !== 'production'){
-    require('dotenv').config()
-}
+/*Require access to .env file*/
+require('dotenv').config()
 
 /*Require TLS*/
 const tls = require('tls')
+
+/*Require crypto, used later to counter CSRF*/
+const { randomBytes } = require('crypto');
 
 /*Require Postgres module*/
 const dbConnection = require('./db-connection');
@@ -14,7 +16,7 @@ const express = require('express');
 /* Including static file webserver libraries*/
 const static = require('node-static');
 
-/*Include HTTP server library*/
+/*Include HTTPS server library*/
 const https = require('https');
 
 /*Include flash and session*/
@@ -44,8 +46,8 @@ const inputValidation = require('./inputValidation.js');
 dbConnection.connectToDB();
 
 /*Assume this is running on a web server (Heroku)*/
-var port = process.env.PORT;
-var directory = __dirname + '/public';
+let port = process.env.PORT;
+let directory = __dirname + '/public';
 
 /*If this is not a web server, the readjust the port to localhost*/
 if(typeof port == 'undefined' || port){
@@ -61,10 +63,14 @@ app.use('/', express.static(directory));
 app.use(express.urlencoded({ extended: false}));
 app.use(flash());
 app.use(session({
-    secret : process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false
-    //cookie: { maxAge: 600000 }
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 600000,
+        sameSite: true,
+        secure: true
+    }
 }))
 
 /*Uer passport and session*/
@@ -81,14 +87,27 @@ app.get('/', checkAuthenticated, (req, res) => {
 })
 
 app.get('/register', checkNotAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/register.html');
+    //res.sendFile(__dirname + '/public/register.ejs');
+    if (req.session.csrf === undefined) {
+        req.session.csrf = randomBytes(100).toString('base64'); // convert random data to a string
+    }
+    res.render('register', {token: req.session.csrf})
 })
 
 app.get('/login', checkNotAuthenticated, (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
+    if (req.session.csrf === undefined) {
+        req.session.csrf = randomBytes(100).toString('base64'); // convert random data to a string
+    }
+    //res.sendFile(__dirname + '/public/login.ejs');
+    res.render('login', {token: req.session.csrf})
 })
 
 app.get('/lobby', checkAuthenticated, (req, res) => {
+    res.redirect('/lobby.html?username=' + req.user.username)
+    //res.render('lobby?username=' + req.user.username);
+})
+
+app.get('/lobby.html?username=/:username', checkAuthenticated, (req, res) => {
     res.redirect('/lobby.html?username=' + req.user.username)
     //res.render('lobby?username=' + req.user.username);
 })
@@ -141,6 +160,17 @@ app.post('/register', [
     check('username').matches(inputValidation.usernameValidation),
     check('password').matches(inputValidation.passwordValidation)
     ], async (req, res) => {
+
+    //Check if token was attached to the request
+    if (!req.body.csrf) {
+        return res.render('errorPage');
+    }
+
+    //Check if token matches with the server
+    if (req.body.csrf !== req.session.csrf) {
+        return res.render('errorPage');
+    }
+
     try{
         /*input validation error handling*/
         const errors = validationResult(req)
@@ -166,14 +196,6 @@ app.post('/register', [
     }
 })
 
-/*Old Login*/
-/*app.post('/login', passport.authenticate('local', {
-        successRedirect: '/lobby',
-        failureRedirect: '/login',
-        failureFlash: true
-    })
-)*/
-
 /*Input validation for login: username and password*/
 app.post('/login', [
     check('username').matches(inputValidation.usernameValidation),
@@ -181,6 +203,17 @@ app.post('/login', [
     ],
 
     function(req, res, next){
+
+        //Check if token was attached to the request
+        if (!req.body.csrf) {
+            return res.render('errorPage');
+        }
+
+        //Check if token matches with the server
+        if (req.body.csrf !== req.session.csrf) {
+            return res.render('errorPage');
+        }
+
         try{
             //input validation error handling
             const errors = validationResult(req)
@@ -217,15 +250,13 @@ app.delete('/logout', (req, res) => {
 })
 
 /*Set up static web server*/
-//var file = new static.Server(directory);
-
 const httpsOptions = {
     isServer: true,
-    cert: fs.readFileSync(path.join(__dirname,'ssl2','server-crt.crt')),
-    key: fs.readFileSync(path.join(__dirname,'ssl2','server-key.pem')),
-    ca: fs.readFileSync(path.join(__dirname,'ssl2','ca-crt.crt')),
-    requestCert: true,
+    cert: fs.readFileSync(path.join(__dirname,'ssl','server-crt.pem')),
+    key: fs.readFileSync(path.join(__dirname,'ssl','server-key.pem')),
+    ca: fs.readFileSync(path.join(__dirname,'ssl','ca-crt.pem')),
     rejectUnauthorized: true,
+    //Setting protocol, TLSv1.3,
     maxVersion: tls.DEFAULT_MAX_VERSION
 }
 
@@ -287,9 +318,16 @@ io.sockets.on('connection', function (socket){
     /*Join room command*/
     /**/
     socket.on('join_room', function(payload){
+        /*Sanitize payload to discard harmful data*/
+        payload.room = sanitizeInput(payload.room)
+        payload.username = sanitizeInput(payload.username)
+        if(payload.isRejoin != undefined){
+            payload.isRejoin = sanitizeInput(payload.isRejoin)
+        }
+
         log('\'join_room command\' command' +JSON.stringify(payload))
         if(('undefined' === typeof payload) || !payload){
-            var error_message = 'join_room had no payload'
+            let error_message = 'join_room had no payload'
             log(error_message)
             socket.emit('join_room_response',{
                 result: 'fail',
@@ -300,9 +338,9 @@ io.sockets.on('connection', function (socket){
         }
 
         /*Check that the payload has a room to join*/
-        var room = payload.room
+        let room = payload.room
         if(('undefined' === typeof room) || !room){
-            var error_message = 'join_room did not specified a room'
+            let error_message = 'join_room did not specified a room'
             log(error_message)
             socket.emit('join_room_response',{
                 result: 'fail',
@@ -313,9 +351,9 @@ io.sockets.on('connection', function (socket){
         }
 
         /*Check that a user has been provided*/
-        var username = payload.username
+        let username = payload.username
         if(('undefined' === typeof username) || !username){
-            var error_message = 'join_room did not specified a username'
+            let error_message = 'join_room did not specified a username'
             log(error_message)
             socket.emit('join_room_response',{
                 result: 'fail',
@@ -334,12 +372,12 @@ io.sockets.on('connection', function (socket){
         /*Allow user to join the room*/
         socket.join(room);
 
-        var roomObject = io.sockets.adapter.rooms[room]
+        let roomObject = io.sockets.adapter.rooms[room]
 
         /*Announce that a player joined*/
 
-        var numClients = roomObject.length
-        var success_data = {
+        let numClients = roomObject.length
+        let success_data = {
             result: 'success',
             room: roomObject,
             username: username,
@@ -349,8 +387,8 @@ io.sockets.on('connection', function (socket){
 
         io.sockets.in(room).emit('join_room_response', success_data)
 
-        for(var socket_in_room in roomObject.sockets){
-            var success_data = {
+        for(let socket_in_room in roomObject.sockets){
+            let success_data = {
                 result: 'success',
                 room: room,
                 username: players[socket_in_room].username,
@@ -1137,30 +1175,8 @@ function send_game_update(socket, game_id, isRejoin, message){
         aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
         delete games[game_id]
         /**********/
-
-
-        /*Delete old games after 1 hour*/
-        /*setTimeout(function (id){
-            return function (){
-                delete games[id]
-            }
-        }(game_id), 60*60*1000)*/
     }
 }
-
-function send_open_game_update(socket, game_id, message){
-
-    let success_data = {
-        result: 'success',
-        game: games[game_id],
-        message: message,
-        game_id: game_id
-    }
-
-    io.in(game_id).emit('game_open_response', success_data)
-}
-
-
 
 /*Check if the user is logged in, if not redirect to Login page*/
 function checkAuthenticated(req, res, next){
@@ -1211,26 +1227,12 @@ function send_timeout_update(socket, game_id, myColor){
     aux.forEach(f => gameMovesToStore.splice(gameMovesToStore.findIndex(e => e.game === f.game),1));
     delete games[game_id]
     /**********/
-
-
-    /*Delete old games after 1 hour*/
-    setTimeout(function (id){
-        return function (){
-            delete games[id]
-        }
-    }(game_id), 60*60*1000)
-
 }
 
-/*Manage messages from client*/
-/*Construct http server to get file from the file server*/
-/*const server = https.createServer(
-    function (request,response) {
-        request.addListener('end', function () {
-            file.serve(request,response);
-        }).resume();
-    }
-)
-    //.listen(process.env.PORT, '0.0.0.0');
-.listen(port)
-console.log('Server running at: ' + port);*/
+function sanitizeInput(input){
+    const regex = /[^0-9a-zA-Z._-]/g
+    /*Sanitize the input prior to send it to the server. On the server side, this process is redone to ensure
+            no harmful data reaches the server*/
+    let sanitizedString = input.replace(regex, '')
+    return sanitizedString
+}

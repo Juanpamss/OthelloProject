@@ -63,7 +63,21 @@ myInput.onkeyup = function() {
     }
 }
 
-if(error){
-    let errorTag = document.getElementById('errorMessage')
-    errorTag.style.display = 'none'
+/*Handle errors*/
+function getURLParameters(parameterName){
+    let pageURL = window.location.search.substring(1)
+    let pageURLVariables = pageURL.split('&')
+    for (let i = 0; i < pageURLVariables.length; i++){
+        let parameter = pageURLVariables[i].split('=')
+        if(parameter[0] == parameterName){
+            return parameter[1]
+        }
+    }
+}
+
+let errorMessage = getURLParameters('fail');
+
+if(errorMessage){
+    let errorDiv = document.getElementById('errorMessage')
+    errorDiv.style.display = 'block'
 }

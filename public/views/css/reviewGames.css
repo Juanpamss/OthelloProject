@@ -18,7 +18,7 @@ body {
     font-size: 14px;
     font-family: sans-serif;
     overflow-y: scroll;
-    height: auto;
+    height: 500px;
 }
 
 .table-refresh__table{
