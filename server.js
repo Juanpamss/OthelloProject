@@ -1,6 +1,9 @@
 /*Require access to .env file*/
 require('dotenv').config()
 
+/*Require helmet (to ensure HSTS)*/
+const helmet = require('helmet')
+
 /*Require TLS*/
 const tls = require('tls')
 
@@ -57,9 +60,14 @@ if(typeof port == 'undefined' || port){
 
 /*Setting Login*/
 //Tell the server to serve static files from the public folder
-app.use('/', express.static(directory));
+app.use('/', express.static(directory,{index: false}));
 
 /*Define usages*/
+app.use(
+    helmet({
+        contentSecurityPolicy: false,
+    })
+);
 app.use(express.urlencoded({ extended: false}));
 app.use(flash());
 app.use(session({
@@ -69,7 +77,8 @@ app.use(session({
     cookie: {
         maxAge: 600000,
         sameSite: true,
-        secure: true
+        secure: true,
+        httpOnly: true
     }
 }))
 
@@ -87,7 +96,6 @@ app.get('/', checkAuthenticated, (req, res) => {
 })
 
 app.get('/register', checkNotAuthenticated, (req, res) => {
-    //res.sendFile(__dirname + '/public/register.ejs');
     if (req.session.csrf === undefined) {
         req.session.csrf = randomBytes(100).toString('base64'); // convert random data to a string
     }
@@ -98,22 +106,18 @@ app.get('/login', checkNotAuthenticated, (req, res) => {
     if (req.session.csrf === undefined) {
         req.session.csrf = randomBytes(100).toString('base64'); // convert random data to a string
     }
-    //res.sendFile(__dirname + '/public/login.ejs');
     res.render('login', {token: req.session.csrf})
 })
 
 app.get('/lobby', checkAuthenticated, (req, res) => {
     res.redirect('/lobby.html?username=' + req.user.username)
-    //res.render('lobby?username=' + req.user.username);
 })
 
 app.get('/lobby.html?username=/:username', checkAuthenticated, (req, res) => {
     res.redirect('/lobby.html?username=' + req.user.username)
-    //res.render('lobby?username=' + req.user.username);
 })
 
 app.get('/review_games', checkAuthenticated, (req, res) => {
-    //res.sendFile(__dirname + '/public/reviewGames.ejs');
     dbConnection.getGames().then(function (response){
         if(response === undefined && response.length == 0){
             return done(null,false)
